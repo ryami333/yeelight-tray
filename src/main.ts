@@ -35,140 +35,136 @@ if (!existsSync(DB_PATH)) {
 
 const getDaysSince = (date: Date) => differenceInCalendarDays(new Date(), date);
 
+const sync = () => {
+  writeFileSync(DB_PATH, JSON.stringify(db));
+  build();
+};
+
+const initialState: DB = z
+  .object({
+    lastWatered: z
+      .string()
+      .datetime()
+      .transform((str) => new Date(str)),
+    warningThresholdDays: z.number().int(),
+  })
+  .catch({
+    lastWatered: new Date(),
+    warningThresholdDays: 10,
+  })
+  .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
+
+const db = new Proxy(initialState, {
+  set(...args) {
+    const result = Reflect.set(...args);
+    sync();
+    return result;
+  },
+});
+
+const seedlingIcon = nativeImage
+  .createFromPath(resolve(__dirname, "../seedling.png"))
+  .resize({
+    height: 16,
+    width: 16,
+  });
+
+const warningIcon = nativeImage
+  .createFromPath(resolve(__dirname, "../warning.png"))
+  .resize({
+    height: 16,
+    width: 16,
+  });
+
+const tray = new Tray(seedlingIcon);
+
+const build = () => {
+  const today = new Date();
+  const last30Days = Array(30)
+    .fill(undefined)
+    .map((_, index) => {
+      return addDays(today, -1 * index);
+    });
+
+  const daysSinceLastWatered = getDaysSince(db.lastWatered);
+  tray.setImage(
+    daysSinceLastWatered > db.warningThresholdDays ? warningIcon : seedlingIcon
+  );
+
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      new MenuItem({
+        label: `Last watered: ${
+          daysSinceLastWatered === 0
+            ? "today"
+            : `${printDate(db.lastWatered)} (${daysSinceLastWatered} days ago)`
+        }`,
+        type: "normal",
+        enabled: false,
+      }),
+      new MenuItem({
+        label: "I just watered my plants",
+        type: "normal",
+        click: () => {
+          db.lastWatered = new Date();
+        },
+      }),
+      new MenuItem({
+        label: "I watered my plants on",
+        type: "submenu",
+        submenu: Menu.buildFromTemplate(
+          last30Days.map((date) => {
+            return new MenuItem({
+              type: "normal",
+              label: printDate(date),
+              click: () => {
+                db.lastWatered = date;
+              },
+            });
+          })
+        ),
+      }),
+      new MenuItem({
+        type: "separator",
+      }),
+      new MenuItem({
+        type: "submenu",
+        label: "Settings",
+        submenu: Menu.buildFromTemplate([
+          {
+            type: "submenu",
+            label: "Warning threshold",
+            submenu: Menu.buildFromTemplate(
+              Array(29)
+                .fill(undefined)
+                .map((_, index) => {
+                  const days = index + 2;
+                  return new MenuItem({
+                    type: "normal",
+                    label: `${days} days ${
+                      db.warningThresholdDays === days ? "✓" : ""
+                    }`,
+                    click: () => {
+                      db.warningThresholdDays = days;
+                    },
+                  });
+                })
+            ),
+          },
+        ]),
+      }),
+      new MenuItem({
+        type: "normal",
+        label: "Quit",
+        click: () => app.quit(),
+      }),
+    ])
+  );
+};
+
 app
   .whenReady()
   .then(() => {
-    const sync = () => {
-      writeFileSync(DB_PATH, JSON.stringify(db));
-      build();
-    };
-
-    const initialState: DB = z
-      .object({
-        lastWatered: z
-          .string()
-          .datetime()
-          .transform((str) => new Date(str)),
-        warningThresholdDays: z.number().int(),
-      })
-      .catch({
-        lastWatered: new Date(),
-        warningThresholdDays: 10,
-      })
-      .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
-
-    const db = new Proxy(initialState, {
-      set(...args) {
-        const result = Reflect.set(...args);
-        sync();
-        return result;
-      },
-    });
-
-    const seedlingIcon = nativeImage
-      .createFromPath(resolve(__dirname, "../seedling.png"))
-      .resize({
-        height: 16,
-        width: 16,
-      });
-
-    const warningIcon = nativeImage
-      .createFromPath(resolve(__dirname, "../warning.png"))
-      .resize({
-        height: 16,
-        width: 16,
-      });
-
-    const tray = new Tray(seedlingIcon);
-
-    const build = () => {
-      const today = new Date();
-      const last30Days = Array(30)
-        .fill(undefined)
-        .map((_, index) => {
-          return addDays(today, -1 * index);
-        });
-
-      const daysSinceLastWatered = getDaysSince(db.lastWatered);
-      tray.setImage(
-        daysSinceLastWatered > db.warningThresholdDays
-          ? warningIcon
-          : seedlingIcon
-      );
-
-      tray.setContextMenu(
-        Menu.buildFromTemplate([
-          new MenuItem({
-            label: `Last watered: ${
-              daysSinceLastWatered === 0
-                ? "today"
-                : `${printDate(
-                    db.lastWatered
-                  )} (${daysSinceLastWatered} days ago)`
-            }`,
-            type: "normal",
-            enabled: false,
-          }),
-          new MenuItem({
-            label: "I just watered my plants",
-            type: "normal",
-            click: () => {
-              db.lastWatered = new Date();
-            },
-          }),
-          new MenuItem({
-            label: "I watered my plants on",
-            type: "submenu",
-            submenu: Menu.buildFromTemplate(
-              last30Days.map((date) => {
-                return new MenuItem({
-                  type: "normal",
-                  label: printDate(date),
-                  click: () => {
-                    db.lastWatered = date;
-                  },
-                });
-              })
-            ),
-          }),
-          new MenuItem({
-            type: "separator",
-          }),
-          new MenuItem({
-            type: "submenu",
-            label: "Settings",
-            submenu: Menu.buildFromTemplate([
-              {
-                type: "submenu",
-                label: "Warning threshold",
-                submenu: Menu.buildFromTemplate(
-                  Array(29)
-                    .fill(undefined)
-                    .map((_, index) => {
-                      const days = index + 2;
-                      return new MenuItem({
-                        type: "normal",
-                        label: `${days} days ${
-                          db.warningThresholdDays === days ? "✓" : ""
-                        }`,
-                        click: () => {
-                          db.warningThresholdDays = days;
-                        },
-                      });
-                    })
-                ),
-              },
-            ]),
-          }),
-          new MenuItem({
-            type: "normal",
-            label: "Quit",
-            click: () => app.quit(),
-          }),
-        ])
-      );
-    };
-
     build();
 
     setInterval(() => build(), ms("2h"));

@@ -5,9 +5,17 @@ import { MenuItem, Tray } from "electron/main";
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
+interface DB {
+  lastWatered: Date;
+}
+
 app
   .whenReady()
   .then(() => {
+    const db: DB = {
+      lastWatered: new Date(),
+    };
+
     let icon = nativeImage.createFromPath(
       "/Users/mitch/Desktop/Screenshot 2023-05-23 at 16.06.35.png"
     );
@@ -21,8 +29,9 @@ app
 
     const printLastWateredLabel = (date: Date) => `Last watered: ${date}`;
 
+    const build = () => {
     const lastWateredMenuItem = new MenuItem({
-      label: printLastWateredLabel(new Date()),
+        label: printLastWateredLabel(new Date(db.lastWatered)),
       type: "normal",
       enabled: false,
     });
@@ -31,14 +40,13 @@ app
       label: "I watered my plants today",
       type: "normal",
       click: () => {
-        lastWateredMenuItem.label = "Updated";
+          db.lastWatered = new Date();
         build();
       },
     });
 
     const menuTemplate = [lastWateredMenuItem, wateredButton];
 
-    const build = () => {
       contextMenu = Menu.buildFromTemplate(menuTemplate);
       tray.setContextMenu(contextMenu);
     };

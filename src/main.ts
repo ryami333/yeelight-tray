@@ -131,10 +131,9 @@ app
               })
             ),
           }),
-          {
+          new MenuItem({
             type: "separator",
-          },
-
+          }),
           new MenuItem({
             type: "submenu",
             label: "Settings",
@@ -160,6 +159,11 @@ app
                 ),
               },
             ]),
+          }),
+          new MenuItem({
+            type: "normal",
+            label: "Quit",
+            click: () => app.quit(),
           }),
         ])
       );

@@ -4,7 +4,7 @@ import { MenuItem, Tray } from "electron/main";
 import { z } from "zod";
 import { resolve } from "path";
 import { writeFileSync, readFileSync, existsSync } from "fs";
-import { addDays, format } from "date-fns";
+import { addDays, format, differenceInCalendarDays } from "date-fns";
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
@@ -30,6 +30,10 @@ const printDate = (date: Date) => {
 if (!existsSync(DB_PATH)) {
   writeFileSync(DB_PATH, "");
 }
+
+const getDaysSince = (date: Date) => differenceInCalendarDays(new Date(), date);
+
+const WATERING_THRESHOLD = 10; /* days */
 
 app
   .whenReady()
@@ -83,8 +87,14 @@ app
           return addDays(today, -1 * index);
         });
 
+      const daysSinceLastWatered = getDaysSince(db.lastWatered);
+
       const lastWateredMenuItem = new MenuItem({
-        label: `Last watered: ${printDate(db.lastWatered)}`,
+        label: `Last watered: ${
+          daysSinceLastWatered === 0
+            ? "today"
+            : `${printDate(db.lastWatered)} (${daysSinceLastWatered} days ago)`
+        }`,
         type: "normal",
         enabled: false,
       });
@@ -112,6 +122,10 @@ app
           })
         ),
       });
+
+      tray.setImage(
+        daysSinceLastWatered > WATERING_THRESHOLD ? warningIcon : seedlingIcon
+      );
 
       tray.setContextMenu(
         Menu.buildFromTemplate([

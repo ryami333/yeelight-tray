@@ -16,8 +16,9 @@ app.whenReady().then(() => {
   const tray = new Tray(icon);
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: "Item1", type: "radio" },
-    { label: "Item2", type: "radio" },
+    { label: `Last watered: ${new Date()}`, type: "normal", enabled: false },
+    { label: "I watered my plants today", type: "separator" },
+    { label: "I watered my plants on:", type: "normal" },
   ]);
 
   // Make a change to the context menu

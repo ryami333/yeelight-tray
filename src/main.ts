@@ -59,14 +59,21 @@ app
       },
     });
 
-    let icon = nativeImage.createFromPath(
-      "/Users/mitch/Desktop/Screenshot 2023-05-23 at 16.06.35.png"
-    );
-    icon = icon.resize({
-      height: 16,
-      width: 16,
-    });
-    const tray = new Tray(icon);
+    const seedlingIcon = nativeImage
+      .createFromPath(resolve(__dirname, "../seedling.png"))
+      .resize({
+        height: 16,
+        width: 16,
+      });
+
+    const warningIcon = nativeImage
+      .createFromPath(resolve(__dirname, "../warning.png"))
+      .resize({
+        height: 16,
+        width: 16,
+      });
+
+    const tray = new Tray(seedlingIcon);
 
     const build = () => {
       const today = new Date();

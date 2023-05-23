@@ -138,7 +138,15 @@ app
             type: "submenu",
             label: "Settings",
             submenu: Menu.buildFromTemplate([
-              {
+              new MenuItem({
+                type: "normal",
+                label: "Open at login",
+                click: () =>
+                  app.setLoginItemSettings({
+                    openAtLogin: true,
+                  }),
+              }),
+              new MenuItem({
                 type: "submenu",
                 label: "Warning threshold",
                 submenu: Menu.buildFromTemplate(
@@ -157,9 +165,10 @@ app
                       });
                     })
                 ),
-              },
+              }),
             ]),
           }),
+
           new MenuItem({
             type: "normal",
             label: "Quit",
@@ -179,5 +188,4 @@ app.dock.hide();
 
 app.setLoginItemSettings({
   openAsHidden: true,
-  openAtLogin: true,
 });

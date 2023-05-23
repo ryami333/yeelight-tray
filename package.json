@@ -8,7 +8,7 @@
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "electron-forge start",
     "build:icons": "electron-icon-builder --flatten --input=./seedling.png --output=.",
-    "package": "yarn build && && yarn build:icons && electron-forge package",
+    "package": "yarn build && yarn build:icons && electron-forge package",
     "make": "electron-forge make"
   },
   "main": "./dist/main.js",

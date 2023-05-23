@@ -139,6 +139,6 @@ app
 
     build();
 
-    setInterval(() => build(), ms("1h"));
+    setInterval(() => build(), ms("2h"));
   })
   .catch(console.error);

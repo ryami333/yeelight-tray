@@ -1,88 +1,28 @@
-import { app, Menu, shell } from "electron";
+import { app, Menu } from "electron";
+import { nativeImage } from "electron/common";
+import { Tray } from "electron/main";
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-const menu = Menu.buildFromTemplate([
-  // { role: 'appMenu' }
-  {
-    label: app.name,
+app.whenReady().then(() => {
+  let icon = nativeImage.createFromPath(
+    "/Users/mitch/Desktop/Screenshot 2023-05-23 at 16.06.35.png"
+  );
+  icon = icon.resize({
+    height: 16,
+    width: 16,
+  });
+  const tray = new Tray(icon);
 
-    submenu: [
-      { role: "about" },
-      { type: "separator" },
-      { role: "services" },
-      { type: "separator" },
-      { role: "hide" },
-      { role: "hideOthers" },
-      { role: "unhide" },
-      { type: "separator" },
-      { role: "quit" },
-    ],
-  },
-  // { role: 'fileMenu' }
-  {
-    label: "File",
-    submenu: [{ role: "close" }],
-  },
-  // { role: 'editMenu' }
-  {
-    label: "Edit",
-    submenu: [
-      { role: "undo" },
-      { role: "redo" },
-      { type: "separator" },
-      { role: "cut" },
-      { role: "copy" },
-      { role: "paste" },
-      { role: "pasteAndMatchStyle" },
-      { role: "delete" },
-      { role: "selectAll" },
-      { type: "separator" },
-      {
-        label: "Speech",
-        submenu: [{ role: "startSpeaking" }, { role: "stopSpeaking" }],
-      },
-    ],
-  },
-  // { role: 'viewMenu' }
-  {
-    label: "View",
-    submenu: [
-      { role: "reload" },
-      { role: "forceReload" },
-      { role: "toggleDevTools" },
-      { type: "separator" },
-      { role: "resetZoom" },
-      { role: "zoomIn" },
-      { role: "zoomOut" },
-      { type: "separator" },
-      { role: "togglefullscreen" },
-    ],
-  },
-  // { role: 'windowMenu' }
-  {
-    label: "Window",
-    submenu: [
-      { role: "minimize" },
-      { role: "zoom" },
-      { type: "separator" },
-      { role: "front" },
-      { type: "separator" },
-      { role: "window" },
-    ],
-  },
-  {
-    role: "help",
-    submenu: [
-      {
-        label: "Learn More",
-        click: async () => {
-          await shell.openExternal("https://electronjs.org");
-        },
-      },
-    ],
-  },
-]);
+  const contextMenu = Menu.buildFromTemplate([
+    { label: "Item1", type: "radio" },
+    { label: "Item2", type: "radio" },
+  ]);
 
-Menu.setApplicationMenu(menu);
+  // Make a change to the context menu
+  contextMenu.items[1].checked = false;
+
+  // Call this again for Linux because we modified the context menu
+  tray.setContextMenu(contextMenu);
+});

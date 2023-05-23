@@ -7,7 +7,8 @@
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "electron-forge start",
-    "package": "yarn build && electron-forge package",
+    "build:icons": "electron-icon-builder --flatten --input=./seedling.png --output=.",
+    "package": "yarn build && && yarn build:icons && electron-forge package",
     "make": "electron-forge make"
   },
   "main": "./dist/main.js",
@@ -29,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "electron": "^24.3.0",
+    "electron-icon-builder": "^2.0.1",
     "eslint": "^7.32.0",
     "prettier": "^2.8.8",
     "typescript": "^5.0.4"

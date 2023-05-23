@@ -12,9 +12,18 @@ interface DB {
 app
   .whenReady()
   .then(() => {
-    const db: DB = {
+    const db = new Proxy(
+      {
       lastWatered: new Date(),
-    };
+      } satisfies DB,
+      {
+        set(...args) {
+          const result = Reflect.set(...args);
+          console.log("TODO: sync");
+          return result;
+        },
+      }
+    );
 
     let icon = nativeImage.createFromPath(
       "/Users/mitch/Desktop/Screenshot 2023-05-23 at 16.06.35.png"

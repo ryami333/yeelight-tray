@@ -1,9 +1,13 @@
 import { app, Menu } from "electron";
 import { nativeImage } from "electron/common";
 import { MenuItem, Tray } from "electron/main";
+import { resolve } from "path";
+import { writeFileSync } from "fs";
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+const DB_PATH = resolve(__dirname, "../db.json");
 
 interface DB {
   lastWatered: Date;
@@ -12,6 +16,10 @@ interface DB {
 app
   .whenReady()
   .then(() => {
+    const sync = () => {
+      writeFileSync(DB_PATH, JSON.stringify(db));
+    };
+
     const db = new Proxy(
       {
       lastWatered: new Date(),
@@ -20,6 +28,7 @@ app
         set(...args) {
           const result = Reflect.set(...args);
           console.log("TODO: sync");
+          sync();
           return result;
         },
       }

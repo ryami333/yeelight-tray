@@ -90,41 +90,6 @@ app
         });
 
       const daysSinceLastWatered = getDaysSince(db.lastWatered);
-
-      const lastWateredMenuItem = new MenuItem({
-        label: `Last watered: ${
-          daysSinceLastWatered === 0
-            ? "today"
-            : `${printDate(db.lastWatered)} (${daysSinceLastWatered} days ago)`
-        }`,
-        type: "normal",
-        enabled: false,
-      });
-
-      const wateredButton = new MenuItem({
-        label: "I just watered my plants",
-        type: "normal",
-        click: () => {
-          db.lastWatered = new Date();
-        },
-      });
-
-      const wateredSubmenu = new MenuItem({
-        label: "I watered my plants on",
-        type: "submenu",
-        submenu: Menu.buildFromTemplate(
-          last30Days.map((date) => {
-            return new MenuItem({
-              type: "normal",
-              label: printDate(date),
-              click: () => {
-                db.lastWatered = date;
-              },
-            });
-          })
-        ),
-      });
-
       tray.setImage(
         daysSinceLastWatered > db.warningThresholdDays
           ? warningIcon
@@ -133,9 +98,39 @@ app
 
       tray.setContextMenu(
         Menu.buildFromTemplate([
-          lastWateredMenuItem,
-          wateredButton,
-          wateredSubmenu,
+          new MenuItem({
+            label: `Last watered: ${
+              daysSinceLastWatered === 0
+                ? "today"
+                : `${printDate(
+                    db.lastWatered
+                  )} (${daysSinceLastWatered} days ago)`
+            }`,
+            type: "normal",
+            enabled: false,
+          }),
+          new MenuItem({
+            label: "I just watered my plants",
+            type: "normal",
+            click: () => {
+              db.lastWatered = new Date();
+            },
+          }),
+          new MenuItem({
+            label: "I watered my plants on",
+            type: "submenu",
+            submenu: Menu.buildFromTemplate(
+              last30Days.map((date) => {
+                return new MenuItem({
+                  type: "normal",
+                  label: printDate(date),
+                  click: () => {
+                    db.lastWatered = date;
+                  },
+                });
+              })
+            ),
+          }),
           {
             type: "separator",
           },

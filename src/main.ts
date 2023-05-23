@@ -4,6 +4,7 @@ import { MenuItem, Tray } from "electron/main";
 import { z } from "zod";
 import { resolve } from "path";
 import { writeFileSync, readFileSync, existsSync } from "fs";
+import { addDays, format } from "date-fns";
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
@@ -20,6 +21,10 @@ const safeJsonParse = (source: string) => {
   } catch {
     return undefined;
   }
+};
+
+const printDate = (date: Date) => {
+  return format(date, "E do MMM" /* Mon 1st Jan */);
 };
 
 if (!existsSync(DB_PATH)) {
@@ -63,25 +68,50 @@ app
     });
     const tray = new Tray(icon);
 
-    const printLastWateredLabel = (date: Date) => `Last watered: ${date}`;
-
     const build = () => {
+      const today = new Date();
+      const last30Days = Array(30)
+        .fill(undefined)
+        .map((_, index) => {
+          return addDays(today, -1 * index);
+        });
+
       const lastWateredMenuItem = new MenuItem({
-        label: printLastWateredLabel(new Date(db.lastWatered)),
+        label: `Last watered: ${printDate(db.lastWatered)}`,
         type: "normal",
         enabled: false,
       });
 
       const wateredButton = new MenuItem({
-        label: "I watered my plants today",
+        label: "I just watered my plants",
         type: "normal",
         click: () => {
           db.lastWatered = new Date();
         },
       });
 
+      const wateredSubmenu = new MenuItem({
+        label: "I watered my plants on",
+        type: "submenu",
+        submenu: Menu.buildFromTemplate(
+          last30Days.map((date) => {
+            return new MenuItem({
+              type: "normal",
+              label: printDate(date),
+              click: () => {
+                db.lastWatered = date;
+              },
+            });
+          })
+        ),
+      });
+
       tray.setContextMenu(
-        Menu.buildFromTemplate([lastWateredMenuItem, wateredButton])
+        Menu.buildFromTemplate([
+          lastWateredMenuItem,
+          wateredButton,
+          wateredSubmenu,
+        ])
       );
     };
 

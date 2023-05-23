@@ -14,6 +14,7 @@ const DB_PATH = resolve(__dirname, "../db.json");
 
 interface DB {
   lastWatered: Date;
+  warningThresholdDays: number;
 }
 
 const safeJsonParse = (source: string) => {
@@ -34,8 +35,6 @@ if (!existsSync(DB_PATH)) {
 
 const getDaysSince = (date: Date) => differenceInCalendarDays(new Date(), date);
 
-const WATERING_THRESHOLD = 10; /* days */
-
 app
   .whenReady()
   .then(() => {
@@ -50,9 +49,11 @@ app
           .string()
           .datetime()
           .transform((str) => new Date(str)),
+        warningThresholdDays: z.number().int(),
       })
       .catch({
         lastWatered: new Date(),
+        warningThresholdDays: 10,
       })
       .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
 
@@ -125,7 +126,9 @@ app
       });
 
       tray.setImage(
-        daysSinceLastWatered > WATERING_THRESHOLD ? warningIcon : seedlingIcon
+        daysSinceLastWatered > db.warningThresholdDays
+          ? warningIcon
+          : seedlingIcon
       );
 
       tray.setContextMenu(
@@ -133,6 +136,36 @@ app
           lastWateredMenuItem,
           wateredButton,
           wateredSubmenu,
+          {
+            type: "separator",
+          },
+
+          new MenuItem({
+            type: "submenu",
+            label: "Settings",
+            submenu: Menu.buildFromTemplate([
+              {
+                type: "submenu",
+                label: "Warning threshold",
+                submenu: Menu.buildFromTemplate(
+                  Array(29)
+                    .fill(undefined)
+                    .map((_, index) => {
+                      const days = index + 2;
+                      return new MenuItem({
+                        type: "normal",
+                        label: `${days} days ${
+                          db.warningThresholdDays === days ? "✓" : ""
+                        }`,
+                        click: () => {
+                          db.warningThresholdDays = days;
+                        },
+                      });
+                    })
+                ),
+              },
+            ]),
+          }),
         ])
       );
     };
@@ -142,3 +175,8 @@ app
     setInterval(() => build(), ms("2h"));
   })
   .catch(console.error);
+
+app.setLoginItemSettings({
+  openAsHidden: true,
+  openAtLogin: true,
+});

@@ -63,8 +63,6 @@ app
     });
     const tray = new Tray(icon);
 
-    let contextMenu: Menu;
-
     const printLastWateredLabel = (date: Date) => `Last watered: ${date}`;
 
     const build = () => {
@@ -82,10 +80,9 @@ app
         },
       });
 
-      const menuTemplate = [lastWateredMenuItem, wateredButton];
-
-      contextMenu = Menu.buildFromTemplate(menuTemplate);
-      tray.setContextMenu(contextMenu);
+      tray.setContextMenu(
+        Menu.buildFromTemplate([lastWateredMenuItem, wateredButton])
+      );
     };
 
     build();

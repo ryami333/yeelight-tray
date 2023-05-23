@@ -1,5 +1,5 @@
 {
-  "name": "Water Warner",
+  "name": "water-warner",
   "version": "1.0.0",
   "description": "A minimal Electron application written with Typescript",
   "scripts": {
@@ -42,7 +42,11 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "Water Warner",
+        "executableName": "Water Warner",
+        "icon": "./icons/icon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-zip",

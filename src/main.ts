@@ -35,11 +35,6 @@ if (!existsSync(DB_PATH)) {
 
 const getDaysSince = (date: Date) => differenceInCalendarDays(new Date(), date);
 
-const sync = () => {
-  writeFileSync(DB_PATH, JSON.stringify(db));
-  build();
-};
-
 const initialState: DB = z
   .object({
     lastWatered: z
@@ -53,14 +48,6 @@ const initialState: DB = z
     warningThresholdDays: 10,
   })
   .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
-
-const db = new Proxy(initialState, {
-  set(...args) {
-    const result = Reflect.set(...args);
-    sync();
-    return result;
-  },
-});
 
 const seedlingIcon = nativeImage
   .createFromPath(resolve(__dirname, "../seedling.png"))
@@ -79,6 +66,19 @@ const warningIcon = nativeImage
 app
   .whenReady()
   .then(() => {
+    const db = new Proxy(initialState, {
+      set(...args) {
+        const result = Reflect.set(...args);
+        sync();
+        return result;
+      },
+    });
+
+    const sync = () => {
+      writeFileSync(DB_PATH, JSON.stringify(db));
+      build();
+    };
+
     const tray = new Tray(seedlingIcon);
 
     const build = () => {

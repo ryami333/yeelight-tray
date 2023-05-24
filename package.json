@@ -1,5 +1,5 @@
 {
-  "name": "water-warner",
+  "name": "yeelight-tray",
   "version": "1.0.0",
   "description": "A minimal Electron application written with Typescript",
   "engines": {
@@ -52,8 +52,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "Water Warner",
-        "executableName": "Water Warner",
+        "name": "Yeelight Tray",
+        "executableName": "Yeelight Tray",
         "icon": "./icons/icon"
       },
       "makers": [

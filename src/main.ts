@@ -22,7 +22,7 @@ Menu.setApplicationMenu(null);
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-const APP_DATA_DIRECTORY = resolve(app.getPath("appData"), "water-warner");
+const APP_DATA_DIRECTORY = resolve(app.getPath("appData"), "yeelight-tray");
 const DB_PATH = resolve(APP_DATA_DIRECTORY, "db.json");
 
 interface DB {

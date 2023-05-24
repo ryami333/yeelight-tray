@@ -115,17 +115,20 @@ app
         Menu.buildFromTemplate([
           new MenuItem({
             type: "normal",
-            label: "Power On",
+            label: "⏻ On",
             click: () => powerOn(),
           }),
           new MenuItem({
             type: "normal",
-            label: "Power Off",
+            label: "⏼ Off",
             click: () => powerOff(),
           }),
           new MenuItem({
+            type: "separator",
+          }),
+          new MenuItem({
             type: "submenu",
-            label: "Brightness",
+            label: "☀️ Brightness",
             submenu: Menu.buildFromTemplate(
               [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(
                 (level) =>
@@ -139,7 +142,7 @@ app
           }),
           new MenuItem({
             type: "submenu",
-            label: "Temperature",
+            label: "🌡 Temperature",
             submenu: Menu.buildFromTemplate([
               {
                 type: "normal",

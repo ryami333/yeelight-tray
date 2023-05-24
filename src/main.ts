@@ -33,8 +33,6 @@ if (!existsSync(DB_PATH)) {
   writeFileSync(DB_PATH, "");
 }
 
-const getDaysSince = (date: Date) => differenceInCalendarDays(new Date(), date);
-
 const initialState: DB = z
   .object({
     lastWatered: z
@@ -89,7 +87,10 @@ app
           return addDays(today, -1 * index);
         });
 
-      const daysSinceLastWatered = getDaysSince(db.lastWatered);
+      const daysSinceLastWatered = differenceInCalendarDays(
+        new Date(),
+        db.lastWatered
+      );
       tray.setImage(
         daysSinceLastWatered > db.warningThresholdDays
           ? warningIcon

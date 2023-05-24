@@ -5,7 +5,7 @@ import { IYeelightDevice } from "yeelight-service/lib/yeelight.interface";
 // import { rgb } from "polished";
 import { resolve } from "path";
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
-import { seedlingIcon } from "./helpers/seedlingIcon";
+import { lightbulbIcon } from "./helpers/lightbulbIcon";
 import { safeJsonParse } from "./helpers/safeJsonParse";
 import { z } from "zod";
 import ms from "ms";
@@ -77,7 +77,7 @@ app
       build();
     };
 
-    const tray = new Tray(seedlingIcon);
+    const tray = new Tray(lightbulbIcon);
 
     const powerOn = () => {
       for (const device of devices) {

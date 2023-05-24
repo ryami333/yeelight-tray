@@ -12,7 +12,7 @@
     "dev": "concurrently -k -p \"[{name}]\" -n \"Watch,Start\" \"yarn dev:build\" \"yarn dev:start\"",
     "lint": "eslint .",
     "start": "electron-forge start",
-    "build:icons": "electron-icon-builder --flatten --input=./seedling.png --output=.",
+    "build:icons": "electron-icon-builder --flatten --input=./lightbulb.png --output=.",
     "package": "yarn build && yarn build:icons && electron-forge package",
     "make": "electron-forge make"
   },

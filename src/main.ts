@@ -69,9 +69,16 @@ app
     /*
      * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
      */
-    const subscriber = yeelightService.devices.subscribe((results) => {
+    let subscriber = yeelightService.devices.subscribe((results) => {
       devices = results;
     });
+
+    const resubscribe = () => {
+      subscriber.unsubscribe();
+      subscriber = yeelightService.devices.subscribe((results) => {
+        devices = results;
+      });
+    };
 
     const sync = () => {
       writeFileSync(DB_PATH, JSON.stringify(db));
@@ -160,6 +167,14 @@ app
                 click: () => changeRgb(rgb(255, 121, 0)),
               },
             ]),
+          }),
+          new MenuItem({
+            type: "separator",
+          }),
+          new MenuItem({
+            type: "normal",
+            label: "↻ Resubscribe",
+            click: () => resubscribe(),
           }),
           new MenuItem({
             type: "separator",

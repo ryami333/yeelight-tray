@@ -10,6 +10,7 @@ import { safeJsonParse } from "./helpers/safeJsonParse";
 import { z } from "zod";
 import ms from "ms";
 import { attemptDeviceCommand } from "./helpers/attemptDeviceCommand";
+import { rgb } from "polished";
 
 const yeelightService = new YeelightService();
 
@@ -97,6 +98,18 @@ app
       }
     };
 
+    const changeColorTemperature = (temperature: number) => {
+      for (const device of devices) {
+        attemptDeviceCommand(() => device.setColorTemperature(temperature));
+      }
+    };
+
+    const changeRgb = (rgb: string) => {
+      for (const device of devices) {
+        attemptDeviceCommand(() => device.setRgb(rgb));
+      }
+    };
+
     const build = () => {
       tray.setContextMenu(
         Menu.buildFromTemplate([
@@ -123,6 +136,27 @@ app
                   })
               )
             ),
+          }),
+          new MenuItem({
+            type: "submenu",
+            label: "Temperature",
+            submenu: Menu.buildFromTemplate([
+              {
+                type: "normal",
+                label: "4271K - Neutral",
+                click: () => changeColorTemperature(4271),
+              },
+              {
+                type: "normal",
+                label: "2985K - Warm",
+                click: () => changeColorTemperature(2985),
+              },
+              {
+                type: "normal",
+                label: "1700K - Warm",
+                click: () => changeRgb(rgb(255, 121, 0)),
+              },
+            ]),
           }),
           new MenuItem({
             type: "separator",

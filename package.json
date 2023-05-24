@@ -7,7 +7,7 @@
   },
   "scripts": {
     "build": "esbuild --platform=node --bundle --sourcemap --minify --external:electron --outfile=dist/main.js --define:process.env.commit=\\\"$(git rev-parse --short HEAD)\\\" src/main.ts",
-    "dev:build": "yarn build --watch",
+    "dev:build": "yarn build --watch --define:process.env.commit=\\\"local\\\"",
     "dev:start": "nodemon --exec \"yarn electron-forge start\" ./dist/main.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"Watch,Start\" \"yarn dev:build\" \"yarn dev:start\"",
     "lint": "eslint -c .eslintrc --ext .ts ./src",

@@ -7,6 +7,12 @@ import { writeFileSync, readFileSync, existsSync } from "fs";
 import { addDays, format, differenceInCalendarDays } from "date-fns";
 import ms from "ms";
 
+/**
+ * Performance improvement:
+ * https://www.electronjs.org/docs/latest/tutorial/performance#8-call-menusetapplicationmenunull-when-you-do-not-need-a-default-menu
+ */
+Menu.setApplicationMenu(null);
+
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 

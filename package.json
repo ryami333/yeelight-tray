@@ -6,8 +6,8 @@
     "node": "^18.16.0"
   },
   "scripts": {
-    "build": "tsc",
-    "dev:build": "tsc -w",
+    "build": "esbuild --platform=node --bundle --sourcemap --minify --external:electron --outfile=dist/main.js src/main.ts",
+    "dev:build": "yarn build --watch",
     "dev:start": "nodemon --exec \"yarn electron-forge start\" ./dist/main.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"Watch,Start\" \"yarn dev:build\" \"yarn dev:start\"",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
@@ -37,6 +37,7 @@
     "concurrently": "^8.0.1",
     "electron": "^24.3.0",
     "electron-icon-builder": "^2.0.1",
+    "esbuild": "^0.17.19",
     "eslint": "^8.41.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",

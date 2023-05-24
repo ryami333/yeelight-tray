@@ -1,14 +1,17 @@
 import { app, Menu } from "electron";
 import { MenuItem, Tray } from "electron/main";
-import { z } from "zod";
+import { YeelightService } from "yeelight-service";
+import { IYeelightDevice } from "yeelight-service/lib/yeelight.interface";
+// import { rgb } from "polished";
 import { resolve } from "path";
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
-import { addDays, differenceInCalendarDays } from "date-fns";
-import ms from "ms";
-import { printDate } from "./helpers/printDate";
 import { seedlingIcon } from "./helpers/seedlingIcon";
-import { warningIcon } from "./helpers/warningIcon";
 import { safeJsonParse } from "./helpers/safeJsonParse";
+import { z } from "zod";
+import ms from "ms";
+import { attemptDeviceCommand } from "./helpers/attemptDeviceCommand";
+
+const yeelightService = new YeelightService();
 
 /**
  * Performance improvement:
@@ -51,13 +54,22 @@ const initialState: DB = z
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
     const db = new Proxy(initialState, {
       set(...args) {
         const result = Reflect.set(...args);
         sync();
         return result;
       },
+    });
+
+    let devices: IYeelightDevice[] = [];
+
+    /*
+     * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
+     */
+    const subscriber = yeelightService.devices.subscribe((results) => {
+      devices = results;
     });
 
     const sync = () => {
@@ -67,98 +79,33 @@ app
 
     const tray = new Tray(seedlingIcon);
 
+    const powerOn = () => {
+      for (const device of devices) {
+        attemptDeviceCommand(() => device.setPower("on", "smooth"));
+      }
+    };
+
+    const powerOff = () => {
+      for (const device of devices) {
+        attemptDeviceCommand(() => device.setPower("off", "smooth"));
+      }
+    };
+
     const build = () => {
-      const today = new Date();
-      const last30Days = Array(30)
-        .fill(undefined)
-        .map((_, index) => {
-          return addDays(today, -1 * index);
-        });
-
-      const daysSinceLastWatered = differenceInCalendarDays(
-        new Date(),
-        db.lastWatered
-      );
-      tray.setImage(
-        daysSinceLastWatered > db.warningThresholdDays
-          ? warningIcon
-          : seedlingIcon
-      );
-
       tray.setContextMenu(
         Menu.buildFromTemplate([
           new MenuItem({
-            label: `Last watered: ${
-              daysSinceLastWatered === 0
-                ? "today"
-                : `${printDate(
-                    db.lastWatered
-                  )} (${daysSinceLastWatered} days ago)`
-            }`,
             type: "normal",
-            enabled: false,
+            label: "Power On",
+            click: () => powerOn(),
+          }),
+          new MenuItem({
+            type: "normal",
+            label: "Power Off",
+            click: () => powerOff(),
           }),
           new MenuItem({
             type: "separator",
-          }),
-          new MenuItem({
-            label: "I just watered my plants",
-            type: "normal",
-            click: () => {
-              db.lastWatered = new Date();
-            },
-          }),
-          new MenuItem({
-            label: "I watered my plants on",
-            type: "submenu",
-            submenu: Menu.buildFromTemplate(
-              last30Days.map((date) => {
-                return new MenuItem({
-                  type: "normal",
-                  label: printDate(date),
-                  click: () => {
-                    db.lastWatered = date;
-                  },
-                });
-              })
-            ),
-          }),
-          new MenuItem({
-            type: "separator",
-          }),
-          new MenuItem({
-            type: "submenu",
-            label: "Settings",
-            submenu: Menu.buildFromTemplate([
-              new MenuItem({
-                type: "normal",
-                label: "Open at login",
-                click: () =>
-                  app.setLoginItemSettings({
-                    openAtLogin: true,
-                  }),
-              }),
-              new MenuItem({
-                type: "submenu",
-                label: "Warning threshold",
-                submenu: Menu.buildFromTemplate(
-                  Array(29)
-                    .fill(undefined)
-                    .map((_, index) => {
-                      const days = index + 2;
-                      return new MenuItem({
-                        type: "normal",
-                        label: `${days} days ${
-                          db.warningThresholdDays === days ? "✓" : ""
-                        }`,
-                        click: () => {
-                          db.warningThresholdDays = days;
-                        },
-                      });
-                    })
-                ),
-              }),
-            ]),
           }),
           new MenuItem({
             type: "normal",

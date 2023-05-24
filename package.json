@@ -44,8 +44,9 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "date-fns": "^2.30.0",
     "ms": "^2.1.3",
+    "polished": "^4.2.2",
+    "yeelight-service": "^1.0.2",
     "zod": "^3.21.4"
   },
   "config": {

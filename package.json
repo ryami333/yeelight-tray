@@ -6,7 +6,7 @@
     "node": "^18.16.0"
   },
   "scripts": {
-    "build": "esbuild --platform=node --bundle --sourcemap --minify --external:electron --outfile=dist/main.js src/main.ts",
+    "build": "esbuild --platform=node --bundle --sourcemap --minify --external:electron --outfile=dist/main.js --define:process.env.commit=\\\"$(git rev-parse --short HEAD)\\\" src/main.ts",
     "dev:build": "yarn build --watch",
     "dev:start": "nodemon --exec \"yarn electron-forge start\" ./dist/main.js",
     "dev": "concurrently -k -p \"[{name}]\" -n \"Watch,Start\" \"yarn dev:build\" \"yarn dev:start\"",

@@ -99,6 +99,9 @@ app
             enabled: false,
           }),
           new MenuItem({
+            type: "separator",
+          }),
+          new MenuItem({
             label: "I just watered my plants",
             type: "normal",
             click: () => {
@@ -157,11 +160,18 @@ app
               }),
             ]),
           }),
-
           new MenuItem({
             type: "normal",
             label: "Quit",
             click: () => app.quit(),
+          }),
+          new MenuItem({
+            type: "separator",
+          }),
+          new MenuItem({
+            type: "normal",
+            enabled: false,
+            label: `Version: ${process.env.commit}`,
           }),
         ])
       );

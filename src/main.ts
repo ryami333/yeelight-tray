@@ -1,11 +1,14 @@
 import { app, Menu } from "electron";
-import { nativeImage } from "electron/common";
 import { MenuItem, Tray } from "electron/main";
 import { z } from "zod";
 import { resolve } from "path";
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
-import { addDays, format, differenceInCalendarDays } from "date-fns";
+import { addDays, differenceInCalendarDays } from "date-fns";
 import ms from "ms";
+import { printDate } from "./helpers/printDate";
+import { seedlingIcon } from "./helpers/seedlingIcon";
+import { warningIcon } from "./helpers/warningIcon";
+import { safeJsonParse } from "./helpers/safeJsonParse";
 
 /**
  * Performance improvement:
@@ -23,18 +26,6 @@ interface DB {
   lastWatered: Date;
   warningThresholdDays: number;
 }
-
-const safeJsonParse = (source: string) => {
-  try {
-    return JSON.parse(source);
-  } catch {
-    return undefined;
-  }
-};
-
-const printDate = (date: Date) => {
-  return format(date, "E do MMM" /* Mon 1st Jan */);
-};
 
 if (!existsSync(APP_DATA_DIRECTORY)) {
   mkdirSync(APP_DATA_DIRECTORY, { recursive: true });
@@ -57,20 +48,6 @@ const initialState: DB = z
     warningThresholdDays: 10,
   })
   .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
-
-const seedlingIcon = nativeImage
-  .createFromPath(resolve(__dirname, "../seedling.png"))
-  .resize({
-    height: 16,
-    width: 16,
-  });
-
-const warningIcon = nativeImage
-  .createFromPath(resolve(__dirname, "../warning.png"))
-  .resize({
-    height: 16,
-    width: 16,
-  });
 
 app
   .whenReady()

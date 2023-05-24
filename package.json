@@ -2,6 +2,9 @@
   "name": "water-warner",
   "version": "1.0.0",
   "description": "A minimal Electron application written with Typescript",
+  "engines": {
+    "node": "^18.16.0"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",

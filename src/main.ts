@@ -35,19 +35,6 @@ app
 
     let devices: IYeelightDevice[] = [];
 
-    const loadDevices = () => {
-      /*
-       * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
-       */
-      const subscriber = yeelightService.devices.subscribe((results) => {
-        devices = results;
-      });
-
-      setTimeout(() => subscriber.unsubscribe(), ms("10s"));
-    };
-
-    loadDevices();
-
     const sync = () => {
       writeState(db);
       build();
@@ -88,6 +75,15 @@ app
     const build = () => {
       tray.setContextMenu(
         Menu.buildFromTemplate([
+          new MenuItem({
+            type: "normal",
+            label: `${devices.length} Online Devices `,
+            enabled: false,
+          }),
+          new MenuItem({
+            type: "separator",
+          }),
+
           new MenuItem({
             type: "normal",
             label: "⏻ On",
@@ -183,6 +179,20 @@ app
         ])
       );
     };
+
+    const loadDevices = () => {
+      /*
+       * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
+       */
+      const subscriber = yeelightService.devices.subscribe((results) => {
+        devices = results;
+        build();
+      });
+
+      setTimeout(() => subscriber.unsubscribe(), ms("10s"));
+    };
+
+    loadDevices();
 
     build();
   })

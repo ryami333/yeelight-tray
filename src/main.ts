@@ -10,7 +10,7 @@ import ms from "ms";
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-const DB_PATH = resolve(__dirname, "../db.json");
+const DB_PATH = resolve(app.getPath("appData"), "db.json");
 
 interface DB {
   lastWatered: Date;

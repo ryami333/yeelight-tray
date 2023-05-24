@@ -3,14 +3,11 @@ import { MenuItem, Tray } from "electron/main";
 import { YeelightService } from "yeelight-service";
 import { IYeelightDevice } from "yeelight-service/lib/yeelight.interface";
 // import { rgb } from "polished";
-import { resolve } from "path";
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
 import { lightbulbIcon } from "./helpers/lightbulbIcon";
-import { safeJsonParse } from "./helpers/safeJsonParse";
-import { z } from "zod";
 import ms from "ms";
 import { attemptDeviceCommand } from "./helpers/attemptDeviceCommand";
 import { rgb } from "polished";
+import { readState, writeState } from "./helpers/state";
 
 const yeelightService = new YeelightService();
 
@@ -23,35 +20,7 @@ Menu.setApplicationMenu(null);
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-const APP_DATA_DIRECTORY = resolve(app.getPath("appData"), "yeelight-tray");
-const DB_PATH = resolve(APP_DATA_DIRECTORY, "db.json");
-
-interface DB {
-  lastWatered: Date;
-  warningThresholdDays: number;
-}
-
-if (!existsSync(APP_DATA_DIRECTORY)) {
-  mkdirSync(APP_DATA_DIRECTORY, { recursive: true });
-}
-
-if (!existsSync(DB_PATH)) {
-  writeFileSync(DB_PATH, "");
-}
-
-const initialState: DB = z
-  .object({
-    lastWatered: z
-      .string()
-      .datetime()
-      .transform((str) => new Date(str)),
-    warningThresholdDays: z.number().int(),
-  })
-  .catch({
-    lastWatered: new Date(),
-    warningThresholdDays: 10,
-  })
-  .parse(safeJsonParse(readFileSync(DB_PATH, "utf8")));
+const initialState = readState();
 
 app
   .whenReady()
@@ -66,22 +35,21 @@ app
 
     let devices: IYeelightDevice[] = [];
 
-    /*
-     * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
-     */
-    let subscriber = yeelightService.devices.subscribe((results) => {
-      devices = results;
-    });
-
-    const resubscribe = () => {
-      subscriber.unsubscribe();
-      subscriber = yeelightService.devices.subscribe((results) => {
+    const loadDevices = () => {
+      /*
+       * ⚠️ Make sure you enabled the LAN Control option in the Yeelight app.
+       */
+      const subscriber = yeelightService.devices.subscribe((results) => {
         devices = results;
       });
+
+      setTimeout(() => subscriber.unsubscribe(), ms("10s"));
     };
 
+    loadDevices();
+
     const sync = () => {
-      writeFileSync(DB_PATH, JSON.stringify(db));
+      writeState(db);
       build();
     };
 
@@ -169,12 +137,32 @@ app
             ]),
           }),
           new MenuItem({
+            type: "submenu",
+            label: "🌈 Color",
+            submenu: Menu.buildFromTemplate(
+              [
+                ["🟥 Red", "#ff0000"],
+                ["🟪 Purple", "#800080"],
+                ["🟩 Green", "#008000"],
+                ["🟨 Yellow", "#ffff00"],
+                ["🟦 Blue", "#0000ff"],
+              ].map(
+                ([name, color]) =>
+                  new MenuItem({
+                    type: "normal",
+                    label: name,
+                    click: () => changeRgb(color),
+                  })
+              )
+            ),
+          }),
+          new MenuItem({
             type: "separator",
           }),
           new MenuItem({
             type: "normal",
             label: "↻ Resubscribe",
-            click: () => resubscribe(),
+            click: () => loadDevices(),
           }),
           new MenuItem({
             type: "separator",
@@ -197,8 +185,6 @@ app
     };
 
     build();
-
-    setInterval(() => build(), ms("2h"));
   })
   .catch(console.error);
 

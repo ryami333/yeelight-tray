@@ -3,7 +3,7 @@ import { nativeImage } from "electron/common";
 import { MenuItem, Tray } from "electron/main";
 import { z } from "zod";
 import { resolve } from "path";
-import { writeFileSync, readFileSync, existsSync } from "fs";
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from "fs";
 import { addDays, format, differenceInCalendarDays } from "date-fns";
 import ms from "ms";
 
@@ -16,7 +16,8 @@ Menu.setApplicationMenu(null);
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-const DB_PATH = resolve(app.getPath("appData"), "db.json");
+const APP_DATA_DIRECTORY = resolve(app.getPath("appData"), "water-warner");
+const DB_PATH = resolve(APP_DATA_DIRECTORY, "db.json");
 
 interface DB {
   lastWatered: Date;
@@ -34,6 +35,10 @@ const safeJsonParse = (source: string) => {
 const printDate = (date: Date) => {
   return format(date, "E do MMM" /* Mon 1st Jan */);
 };
+
+if (!existsSync(APP_DATA_DIRECTORY)) {
+  mkdirSync(APP_DATA_DIRECTORY, { recursive: true });
+}
 
 if (!existsSync(DB_PATH)) {
   writeFileSync(DB_PATH, "");

@@ -1,3 +1,4 @@
+import "source-map-support/register";
 import { app, Menu } from "electron";
 import { MenuItem, Tray } from "electron/main";
 import { YeelightService } from "yeelight-service";

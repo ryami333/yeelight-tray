@@ -3,11 +3,10 @@ import { app, Menu } from "electron";
 import { MenuItem, Tray } from "electron/main";
 import { YeelightService } from "yeelight-service";
 import { IYeelightDevice } from "yeelight-service/lib/yeelight.interface";
-// import { rgb } from "polished";
 import { lightbulbIcon } from "./helpers/lightbulbIcon";
 import ms from "ms";
 import { attemptDeviceCommand } from "./helpers/attemptDeviceCommand";
-import { rgb } from "polished";
+import rgb from "polished/lib/color/rgb";
 import { readState, writeState } from "./helpers/state";
 
 const yeelightService = new YeelightService();

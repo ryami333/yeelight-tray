@@ -107,8 +107,8 @@ app
                     type: "normal",
                     label: String(level),
                     click: () => changeBrightness(level),
-                  })
-              )
+                  }),
+              ),
             ),
           }),
           new MenuItem({
@@ -148,8 +148,8 @@ app
                     type: "normal",
                     label: name,
                     click: () => changeRgb(color),
-                  })
-              )
+                  }),
+              ),
             ),
           }),
           new MenuItem({
@@ -176,7 +176,7 @@ app
             enabled: false,
             label: `Version: ${process.env.commit}`,
           }),
-        ])
+        ]),
       );
     };
 

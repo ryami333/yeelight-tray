@@ -1,7 +1,7 @@
 {
   "name": "yeelight-tray",
   "version": "1.0.0",
-  "description": "A minimal Electron application written with Typescript",
+  "description": "A tray-application for controlling Yeelight lights",
   "engines": {
     "node": "^22.20.0"
   },
@@ -17,17 +17,7 @@
     "make": "electron-forge make"
   },
   "main": "./dist/main.js",
-  "repository": "https://github.com/electron/electron-quick-start-typescript",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo",
-    "typescript"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "mitch@mitch-ryan.com",
   "devDependencies": {
     "@electron-forge/cli": "^7.10.2",
     "@electron-forge/maker-zip": "^7.10.2",

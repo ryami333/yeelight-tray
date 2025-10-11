@@ -198,7 +198,7 @@ app
   })
   .catch(console.error);
 
-app.dock.hide();
+app.dock?.hide();
 
 app.setLoginItemSettings({
   openAsHidden: true,

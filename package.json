@@ -31,7 +31,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
-    "@types/ms": "^0.7.31",
+    "@types/ms": "^2",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "concurrently": "^8.2.0",

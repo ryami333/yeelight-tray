@@ -3,8 +3,8 @@ Service based on official Yeelight API Specification:
 https://www.yeelight.com/download/Yeelight_Inter-Operation_Spec.pdf
 */
 
-import ip from "ip";
 import dgram from "dgram";
+import os from "os";
 import {
   IYeelight,
   IYeelightDevice,
@@ -17,6 +17,16 @@ import { Socket } from "dgram";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { YeelightDevice } from "./device.class";
+
+function getLocalAddress(): string | undefined {
+  for (const interfaces of Object.values(os.networkInterfaces())) {
+    for (const net of interfaces!) {
+      if (net.family === "IPv4" && !net.internal) {
+        return net.address;
+      }
+    }
+  }
+}
 
 export class YeelightService implements IYeelight {
   private readonly socket: Socket = dgram.createSocket("udp4");
@@ -38,7 +48,7 @@ export class YeelightService implements IYeelight {
     this.listen();
 
     this.socket.on("message", (message: Buffer, address: dgram.RemoteInfo) => {
-      if (ip.address() === address.address) {
+      if (getLocalAddress() === address.address) {
         return;
       }
 

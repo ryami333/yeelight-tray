@@ -1,10 +1,16 @@
 import { defineConfig } from "vite";
+import path from "path";
 
 export default defineConfig({
   resolve: {
-    // Some libs that can run in both Web and Node.js, such as `curved-path`,
-    // need to be told to use the Node.js entry point.
     conditions: ["node"],
-    mainFields: ["module", "jsnext:main", "jsnext"],
+    alias: {
+      // yeelight-service's nested tslib uses an ESM wrapper that does
+      // `import tslib from '../tslib.js'` — Vite's CJS interop doesn't
+      // produce a default export for this. Alias to the CJS entry directly.
+      tslib: path.resolve(
+        "node_modules/yeelight-service/node_modules/tslib/tslib.js",
+      ),
+    },
   },
 });

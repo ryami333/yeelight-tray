@@ -3,8 +3,8 @@ Service based on official Yeelight API Specification:
 https://www.yeelight.com/download/Yeelight_Inter-Operation_Spec.pdf
 */
 
-import ip = require("ip");
-import dgram = require("dgram");
+import ip from "ip";
+import dgram from "dgram";
 import {
   IYeelight,
   IYeelightDevice,

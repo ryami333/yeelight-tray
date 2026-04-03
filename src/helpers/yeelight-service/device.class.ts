@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-import net = require("net");
+import net from "net";
 import {
   YeelightDeviceModelEnum,
   YeelightSupportedMethodsEnum,

@@ -1,7 +1,7 @@
 import { app, Menu } from "electron";
 import { MenuItem, Tray } from "electron/main";
-import { YeelightService } from "yeelight-service";
-import { IYeelightDevice } from "yeelight-service/lib/yeelight.interface";
+import { YeelightService } from "./helpers/yeelight-service/yeelight.service";
+import { IYeelightDevice } from "./helpers/yeelight-service/yeelight.interface";
 import { lightbulbIcon } from "./helpers/lightbulbIcon";
 import ms from "ms";
 import { attemptDeviceCommand } from "./helpers/attemptDeviceCommand";

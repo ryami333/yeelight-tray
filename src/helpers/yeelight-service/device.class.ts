@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-import net from "net";
+import net from "node:net";
 import { z } from "zod";
 import {
   YeelightDeviceModelEnum,

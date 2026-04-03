@@ -3,8 +3,8 @@ Service based on official Yeelight API Specification:
 https://www.yeelight.com/download/Yeelight_Inter-Operation_Spec.pdf
 */
 
-import dgram from "dgram";
-import os from "os";
+import dgram from "node:dgram";
+import os from "node:os";
 import { z } from "zod";
 import {
   IYeelight,

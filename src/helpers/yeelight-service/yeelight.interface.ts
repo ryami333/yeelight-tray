@@ -1,5 +1,4 @@
-import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 
 /* Interfaces */
 export interface IYeelightDevice {

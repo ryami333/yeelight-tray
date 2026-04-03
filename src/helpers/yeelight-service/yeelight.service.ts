@@ -13,8 +13,7 @@ import {
   YeelightSupportedMethodsEnum,
   YeelightColorModeEnum,
 } from "./yeelight.interface";
-import { BehaviorSubject, Observable } from "rxjs";
-import { map, filter } from "rxjs/operators";
+import { BehaviorSubject, Observable, map, filter } from "rxjs";
 import { notNullish } from "../notNullish";
 import { YeelightDevice } from "./device.class";
 

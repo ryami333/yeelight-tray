@@ -16,6 +16,7 @@ import {
 import { Socket } from "dgram";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
+import { notNullish } from "../notNullish";
 import { YeelightDevice } from "./device.class";
 
 function getLocalAddress(): string | undefined {

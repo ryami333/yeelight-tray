@@ -142,7 +142,7 @@ export class YeelightService implements IYeelight {
         this.options.port,
         this.options.multicastAddr,
       );
-    } catch (ex) {
+    } catch {
       return;
     }
   }

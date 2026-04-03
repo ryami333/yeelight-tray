@@ -62,7 +62,7 @@ export class YeelightService implements IYeelight {
       map((devices: IYeelightDevice[]) =>
         devices.find((device: IYeelightDevice) => device.name.value === name),
       ),
-      filter((value: IYeelightDevice) => !!value),
+      filter(notNullish),
     );
   }
 
@@ -71,7 +71,7 @@ export class YeelightService implements IYeelight {
       map((devices: IYeelightDevice[]) =>
         devices.find((device: IYeelightDevice) => device.model === model),
       ),
-      filter((value: IYeelightDevice) => !!value),
+      filter(notNullish),
     );
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "yeelight-tray",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A tray-application for controlling Yeelight lights",
   "engines": {
     "node": "^22.20.0"

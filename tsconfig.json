@@ -1,16 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "sourceMap": true,
     "skipLibCheck": true,
+    "rootDir": ".",
     "outDir": "dist",
-    "baseUrl": ".",
     "strict": true,
-    "paths": {
-      "*": ["node_modules/*"]
-    },
     "esModuleInterop": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "vite.*.config.ts"]
 }

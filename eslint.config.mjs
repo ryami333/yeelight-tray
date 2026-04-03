@@ -3,7 +3,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import typescriptEslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist/", "out/"]),
+  globalIgnores(["dist/", "out/", ".vite/"]),
   eslintJs.configs.recommended,
   ...typescriptEslint.configs.recommended,
 ]);

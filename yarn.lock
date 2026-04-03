@@ -4935,13 +4935,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ip@npm:^1.1.5":
-  version: 1.1.9
-  resolution: "ip@npm:1.1.9"
-  checksum: 10c0/5af58bfe2110c9978acfd77a2ffcdf9d33a6ce1c72f49edbaf16958f7a8eb979b5163e43bb18938caf3aaa55cdacde4e470874c58ca3b4b112ea7a30461a0c27
-  languageName: node
-  linkType: hard
-
 "is-arrayish@npm:^0.2.1":
   version: 0.2.1
   resolution: "is-arrayish@npm:0.2.1"
@@ -7573,15 +7566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.5.5":
-  version: 6.6.7
-  resolution: "rxjs@npm:6.6.7"
-  dependencies:
-    tslib: "npm:^1.9.0"
-  checksum: 10c0/e556a13a9aa89395e5c9d825eabcfa325568d9c9990af720f3f29f04a888a3b854f25845c2b55875d875381abcae2d8100af9cacdc57576e7ed6be030a01d2fe
-  languageName: node
-  linkType: hard
-
 "rxjs@npm:^7.8.2":
   version: 7.8.2
   resolution: "rxjs@npm:7.8.2"
@@ -8286,13 +8270,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.9.0":
-  version: 1.14.1
-  resolution: "tslib@npm:1.14.1"
-  checksum: 10c0/69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
-  languageName: node
-  linkType: hard
-
 "tslib@npm:^2.0.1, tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
@@ -8988,16 +8965,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yeelight-service@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "yeelight-service@npm:1.0.2"
-  dependencies:
-    ip: "npm:^1.1.5"
-    rxjs: "npm:^6.5.5"
-  checksum: 10c0/4fe919d67d0595a98dc6c7682f0a03c68adcdb2caeed58384105d5a4b97818efe98ca63d5e1598df6f53b097f17a0808e0aa805533a5edd881142755ac8a36fd
-  languageName: node
-  linkType: hard
-
 "yeelight-tray@workspace:.":
   version: 0.0.0-use.local
   resolution: "yeelight-tray@workspace:."
@@ -9017,7 +8984,6 @@ __metadata:
     typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.58.0"
     vite: "npm:^8.0.3"
-    yeelight-service: "npm:^1.0.2"
     zod: "npm:^4.3.6"
   languageName: unknown
   linkType: soft

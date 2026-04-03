@@ -2,7 +2,6 @@ import "dotenv/config";
 import { createEnv } from "@t3-oss/env-core";
 import z from "zod";
 
-/** @type {import('@electron-forge/shared-types').ForgeConfig} */
 export const env = createEnv({
   server: {
     APPLE_ID: z.email(),
@@ -18,6 +17,7 @@ export const env = createEnv({
   runtimeEnv: process.env,
 });
 
+/** @type {import('@electron-forge/shared-types').ForgeConfig} */
 const config = {
   packagerConfig: {
     name: "Yeelight Tray",

@@ -483,7 +483,7 @@ export class YeelightDevice implements IYeelightDevice {
     method: string;
     params: TYeelightParams;
   }): Promise<IYeelightMethodResponse> {
-    return new Promise((resolve: (value?: IYeelightMethodResponse) => void) => {
+    return new Promise<IYeelightMethodResponse>((resolve) => {
       const message: string = JSON.stringify(command);
 
       this.socket.write(message + "\r\n", "utf-8", () => {

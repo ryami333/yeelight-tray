@@ -24,44 +24,44 @@ export interface IYeelightDevice {
   supportedMethods: YeelightSupportedMethodsEnum[];
 
   /**
-   * @returns {BehaviorSubject<string>} Returns device friendly-name
+   * @returns {BehaviorSubject<string | undefined>} Returns device friendly-name
    */
-  name: BehaviorSubject<string>;
+  name: BehaviorSubject<string | undefined>;
 
   /**
-   * @returns {BehaviorSubject<YeelightPowerState>} Returns device power state - `on` or `off`
+   * @returns {BehaviorSubject<YeelightPowerState | undefined>} Returns device power state - `on` or `off`
    */
-  power: BehaviorSubject<YeelightPowerState>;
+  power: BehaviorSubject<YeelightPowerState | undefined>;
 
   /**
-   * @returns {BehaviorSubject<number>} Returns brightness of the device (in percent 0 - 100)
+   * @returns {BehaviorSubject<number | undefined>} Returns brightness of the device (in percent 0 - 100)
    */
-  brightness: BehaviorSubject<number>;
+  brightness: BehaviorSubject<number | undefined>;
 
   /**
-   * @returns {BehaviorSubject<number>} Returns color temperature of the device (in Kelvin of range from 2700 to 6500)
+   * @returns {BehaviorSubject<number | undefined>} Returns color temperature of the device (in Kelvin of range from 2700 to 6500)
    */
-  colorTemperature: BehaviorSubject<number>;
+  colorTemperature: BehaviorSubject<number | undefined>;
 
   /**
-   * @returns {BehaviorSubject<number>} Returns RGB color (in RGB Hex)
+   * @returns {BehaviorSubject<string | undefined>} Returns RGB color (in RGB Hex)
    */
-  rgb: BehaviorSubject<string>;
+  rgb: BehaviorSubject<string | undefined>;
 
   /**
-   * @returns {BehaviorSubject<string>} Returns hue of the device (in degrees 0 - 359)
+   * @returns {BehaviorSubject<number | undefined>} Returns hue of the device (in degrees 0 - 359)
    */
-  hue: BehaviorSubject<number>;
+  hue: BehaviorSubject<number | undefined>;
 
   /**
-   * @returns {BehaviorSubject<number>} Returns saturation of the device (0 - 100)
+   * @returns {BehaviorSubject<number | undefined>} Returns saturation of the device (0 - 100)
    */
-  saturation: BehaviorSubject<number>;
+  saturation: BehaviorSubject<number | undefined>;
 
   /**
-   * @returns {BehaviorSubject<YeelightColorModeEnum>} Returns color mode of the device
+   * @returns {BehaviorSubject<YeelightColorModeEnum | undefined>} Returns color mode of the device
    */
-  colorMode: BehaviorSubject<YeelightColorModeEnum>;
+  colorMode: BehaviorSubject<YeelightColorModeEnum | undefined>;
 
   /**
    * Destroys current device and it's socket connection

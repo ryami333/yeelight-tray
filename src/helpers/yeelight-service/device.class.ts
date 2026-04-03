@@ -23,25 +23,31 @@ export class YeelightDevice implements IYeelightDevice {
     false,
   );
   private readonly socket: net.Socket = new net.Socket();
-  public id: string;
-  public model: YeelightDeviceModelEnum;
-  public supportedMethods: YeelightSupportedMethodsEnum[];
+  public id!: string;
+  public model!: YeelightDeviceModelEnum;
+  public supportedMethods!: YeelightSupportedMethodsEnum[];
 
-  public name: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  public power: BehaviorSubject<YeelightPowerState> =
-    new BehaviorSubject<YeelightPowerState>(undefined);
-  public brightness: BehaviorSubject<number> = new BehaviorSubject<number>(
-    undefined,
-  );
-  public colorTemperature: BehaviorSubject<number> =
-    new BehaviorSubject<number>(undefined);
-  public rgb: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
-  public hue: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
-  public saturation: BehaviorSubject<number> = new BehaviorSubject<number>(
-    undefined,
-  );
-  public colorMode: BehaviorSubject<YeelightColorModeEnum> =
-    new BehaviorSubject<YeelightColorModeEnum>(undefined);
+  public name: BehaviorSubject<string | undefined> = new BehaviorSubject<
+    string | undefined
+  >(undefined);
+  public power: BehaviorSubject<YeelightPowerState | undefined> =
+    new BehaviorSubject<YeelightPowerState | undefined>(undefined);
+  public brightness: BehaviorSubject<number | undefined> = new BehaviorSubject<
+    number | undefined
+  >(undefined);
+  public colorTemperature: BehaviorSubject<number | undefined> =
+    new BehaviorSubject<number | undefined>(undefined);
+  public rgb: BehaviorSubject<string | undefined> = new BehaviorSubject<
+    string | undefined
+  >(undefined);
+  public hue: BehaviorSubject<number | undefined> = new BehaviorSubject<
+    number | undefined
+  >(undefined);
+  public saturation: BehaviorSubject<number | undefined> = new BehaviorSubject<
+    number | undefined
+  >(undefined);
+  public colorMode: BehaviorSubject<YeelightColorModeEnum | undefined> =
+    new BehaviorSubject<YeelightColorModeEnum | undefined>(undefined);
 
   constructor(host: string, port: number) {
     this.socket.connect(port, host, () => {

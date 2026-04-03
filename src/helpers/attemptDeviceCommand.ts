@@ -1,4 +1,4 @@
-import { IYeelightMethodResponse } from "yeelight-service/lib/yeelight.interface";
+import { IYeelightMethodResponse } from "./yeelight-service/yeelight.interface";
 import { sleep } from "./sleep";
 
 export async function attemptDeviceCommand(

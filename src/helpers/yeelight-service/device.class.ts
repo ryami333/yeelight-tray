@@ -404,7 +404,7 @@ export class YeelightDevice implements IYeelightDevice {
     stringJsons.forEach((stringJson: string) => {
       try {
         JSON.parse(stringJson);
-      } catch (e) {
+      } catch {
         return; // not a JSON object, continue
       }
 
@@ -505,7 +505,7 @@ export class YeelightDevice implements IYeelightDevice {
 
             try {
               JSON.parse(stringJson);
-            } catch (e) {
+            } catch {
               return; // not a JSON object, continue
             }
 

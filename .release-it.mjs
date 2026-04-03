@@ -15,6 +15,7 @@ const config = {
   github: {
     release: true,
     assets: ["out/make/zip/darwin/arm64/*.zip"],
+    skipChecks: true, // Skips the "tag?", "commit?" and "push?" prompts - assumes all `true` (as configured above).
   },
   npm: {
     publish: false,

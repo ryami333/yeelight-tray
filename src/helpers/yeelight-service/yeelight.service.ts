@@ -13,7 +13,6 @@ import {
   YeelightPowerState,
   YeelightColorModeEnum,
 } from "./yeelight.interface";
-import { Socket } from "dgram";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map, filter } from "rxjs/operators";
 import { notNullish } from "../notNullish";
@@ -31,20 +30,14 @@ function getLocalAddress(): string | undefined {
 }
 
 export class YeelightService implements IYeelight {
-  private readonly socket: Socket = dgram.createSocket("udp4");
-  private readonly options: {
-    port: number;
-    multicastAddr: string;
-    discoveryMsg: string;
-  } = {
+  private readonly socket = dgram.createSocket("udp4");
+  private readonly options = {
     port: 1982,
     multicastAddr: "239.255.255.250",
     discoveryMsg:
       'M-SEARCH * HTTP/1.1\r\nMAN: "ssdp:discover"\r\nST: wifi_bulb\r\n',
   };
-  public devices: BehaviorSubject<IYeelightDevice[]> = new BehaviorSubject<
-    IYeelightDevice[]
-  >([]);
+  public devices = new BehaviorSubject<IYeelightDevice[]>([]);
 
   constructor() {
     this.listen();
@@ -60,24 +53,20 @@ export class YeelightService implements IYeelight {
 
   public getDeviceByName(name: string): Observable<IYeelightDevice> {
     return this.devices.pipe(
-      map((devices: IYeelightDevice[]) =>
-        devices.find((device: IYeelightDevice) => device.name.value === name),
-      ),
+      map((devices) => devices.find((device) => device.name.value === name)),
       filter(notNullish),
     );
   }
 
   public getDeviceByModel(model: string): Observable<IYeelightDevice> {
     return this.devices.pipe(
-      map((devices: IYeelightDevice[]) =>
-        devices.find((device: IYeelightDevice) => device.model === model),
-      ),
+      map((devices) => devices.find((device) => device.model === model)),
       filter(notNullish),
     );
   }
 
   public destroy(): void {
-    this.devices.value.forEach((device: IYeelightDevice) => {
+    this.devices.value.forEach((device) => {
       device.destroy();
     });
     this.socket.close();
@@ -89,7 +78,7 @@ export class YeelightService implements IYeelight {
         this.socket.setBroadcast(true);
       });
 
-      const buffer: Buffer = Buffer.from(this.options.discoveryMsg);
+      const buffer = Buffer.from(this.options.discoveryMsg);
       this.socket.send(
         buffer,
         0,
@@ -109,7 +98,7 @@ export class YeelightService implements IYeelight {
       return; // not a valid discovery message
     }
 
-    const headers: string[] = message.toString().split("\r\n");
+    const headers = message.toString().split("\r\n");
 
     const host = this.getHostFromHeaders(headers);
     const port = this.getPortFromHeaders(headers);
@@ -124,7 +113,7 @@ export class YeelightService implements IYeelight {
       return;
     }
 
-    const device: IYeelightDevice = new YeelightDevice(host, port);
+    const device = new YeelightDevice(host, port);
     device.id = id;
     device.supportedMethods = supportedMethods;
     device.model = model;
@@ -137,8 +126,8 @@ export class YeelightService implements IYeelight {
     device.name.next(this.getNameFromHeaders(headers));
     device.power.next(this.getPowerFromHeaders(headers));
 
-    const deviceIndex: number = this.devices?.value.findIndex(
-      (registeredDevice: IYeelightDevice) => registeredDevice.id === device.id,
+    const deviceIndex = this.devices?.value.findIndex(
+      (registeredDevice) => registeredDevice.id === device.id,
     );
 
     if (deviceIndex >= 0) {
@@ -153,12 +142,12 @@ export class YeelightService implements IYeelight {
   private splitHeader(
     header: string,
   ): { key: string; value: string } | undefined {
-    const separatedKayAndValue: string[] = header.split(": ");
+    const separatedKayAndValue = header.split(": ");
     if (separatedKayAndValue.length < 2) {
       return;
     }
-    const key: string = separatedKayAndValue[0].toLowerCase();
-    const value: string = separatedKayAndValue.slice(1).join(":");
+    const key = separatedKayAndValue[0].toLowerCase();
+    const value = separatedKayAndValue.slice(1).join(":");
 
     return { key, value };
   }
@@ -168,7 +157,7 @@ export class YeelightService implements IYeelight {
     headers: string[],
   ): { key: string; value: string } | undefined {
     const header = headers.find(
-      (singleHeader: string) => singleHeader.indexOf(`${parameter}:`) >= 0,
+      (singleHeader) => singleHeader.indexOf(`${parameter}:`) >= 0,
     );
     if (!header) {
       return;
@@ -182,7 +171,7 @@ export class YeelightService implements IYeelight {
       return;
     }
 
-    const partedLocation: string[] = location.value.split(":");
+    const partedLocation = location.value.split(":");
     if (partedLocation.length < 2) {
       return;
     }
@@ -195,7 +184,7 @@ export class YeelightService implements IYeelight {
       return;
     }
 
-    const partedLocation: string[] = location.value.split(":");
+    const partedLocation = location.value.split(":");
     if (partedLocation.length < 3) {
       return;
     }
@@ -249,8 +238,9 @@ export class YeelightService implements IYeelight {
     if (!support?.value) {
       return;
     }
-    const supportedMethods: YeelightSupportedMethodsEnum[] =
-      support.value.split(" ") as YeelightSupportedMethodsEnum[];
+    const supportedMethods = support.value.split(
+      " ",
+    ) as YeelightSupportedMethodsEnum[];
     return supportedMethods;
   }
 

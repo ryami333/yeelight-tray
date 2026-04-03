@@ -19,35 +19,22 @@ export class YeelightDevice implements IYeelightDevice {
     duration: 1000,
   };
 
-  public connected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    false,
-  );
-  private readonly socket: net.Socket = new net.Socket();
+  public connected = new BehaviorSubject<boolean>(false);
+  private readonly socket = new net.Socket();
   public id!: string;
   public model!: YeelightDeviceModelEnum;
   public supportedMethods!: YeelightSupportedMethodsEnum[];
 
-  public name: BehaviorSubject<string | undefined> = new BehaviorSubject<
-    string | undefined
-  >(undefined);
-  public power: BehaviorSubject<YeelightPowerState | undefined> =
-    new BehaviorSubject<YeelightPowerState | undefined>(undefined);
-  public brightness: BehaviorSubject<number | undefined> = new BehaviorSubject<
-    number | undefined
-  >(undefined);
-  public colorTemperature: BehaviorSubject<number | undefined> =
-    new BehaviorSubject<number | undefined>(undefined);
-  public rgb: BehaviorSubject<string | undefined> = new BehaviorSubject<
-    string | undefined
-  >(undefined);
-  public hue: BehaviorSubject<number | undefined> = new BehaviorSubject<
-    number | undefined
-  >(undefined);
-  public saturation: BehaviorSubject<number | undefined> = new BehaviorSubject<
-    number | undefined
-  >(undefined);
-  public colorMode: BehaviorSubject<YeelightColorModeEnum | undefined> =
-    new BehaviorSubject<YeelightColorModeEnum | undefined>(undefined);
+  public name = new BehaviorSubject<string | undefined>(undefined);
+  public power = new BehaviorSubject<YeelightPowerState | undefined>(undefined);
+  public brightness = new BehaviorSubject<number | undefined>(undefined);
+  public colorTemperature = new BehaviorSubject<number | undefined>(undefined);
+  public rgb = new BehaviorSubject<string | undefined>(undefined);
+  public hue = new BehaviorSubject<number | undefined>(undefined);
+  public saturation = new BehaviorSubject<number | undefined>(undefined);
+  public colorMode = new BehaviorSubject<YeelightColorModeEnum | undefined>(
+    undefined,
+  );
 
   constructor(host: string, port: number) {
     this.socket.connect(port, host, () => {
@@ -71,21 +58,18 @@ export class YeelightDevice implements IYeelightDevice {
 
   /* Methods */
   public async setName(name: string): Promise<IYeelightMethodResponse> {
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setName;
-    const params: TYeelightParams = [name];
+    const method = YeelightSupportedMethodsEnum.setName;
+    const params = [name];
     return this.castMethod(method, params);
   }
 
   public async setAsDefault(): Promise<IYeelightMethodResponse> {
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setDefault;
+    const method = YeelightSupportedMethodsEnum.setDefault;
     return this.castMethod(method);
   }
 
   public async togglePower(): Promise<IYeelightMethodResponse> {
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.toggle;
+    const method = YeelightSupportedMethodsEnum.toggle;
     return this.castMethod(method);
   }
 
@@ -115,9 +99,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setPower;
-    const params: TYeelightParams = [powerState, effect, duration];
+    const method = YeelightSupportedMethodsEnum.setPower;
+    const params = [powerState, effect, duration];
 
     return this.castMethod(method, params);
   }
@@ -152,9 +135,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setTemperature;
-    const params: TYeelightParams = [colorTemperature, effect, duration];
+    const method = YeelightSupportedMethodsEnum.setTemperature;
+    const params = [colorTemperature, effect, duration];
 
     return this.castMethod(method, params);
   }
@@ -198,9 +180,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setRgb;
-    const params: TYeelightParams = [rgb, effect, duration];
+    const method = YeelightSupportedMethodsEnum.setRgb;
+    const params = [rgb, effect, duration];
 
     return this.castMethod(method, params);
   }
@@ -239,9 +220,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setHsv;
-    const params: TYeelightParams = [hue, saturation, effect, duration];
+    const method = YeelightSupportedMethodsEnum.setHsv;
+    const params = [hue, saturation, effect, duration];
 
     return this.castMethod(method, params);
   }
@@ -272,9 +252,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.setBrightness;
-    const params: TYeelightParams = [brightness, effect, duration];
+    const method = YeelightSupportedMethodsEnum.setBrightness;
+    const params = [brightness, effect, duration];
 
     return this.castMethod(method, params);
   }
@@ -305,9 +284,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.adjustBrightness;
-    const params: TYeelightParams = [difference, effect, duration];
+    const method = YeelightSupportedMethodsEnum.adjustBrightness;
+    const params = [difference, effect, duration];
     return this.castMethod(method, params);
   }
 
@@ -337,9 +315,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.adjustTemperature;
-    const params: TYeelightParams = [difference, effect, duration];
+    const method = YeelightSupportedMethodsEnum.adjustTemperature;
+    const params = [difference, effect, duration];
     return this.castMethod(method, params);
   }
 
@@ -369,9 +346,8 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const method: YeelightSupportedMethodsEnum =
-      YeelightSupportedMethodsEnum.adjustColor;
-    const params: TYeelightParams = [difference, effect, duration];
+    const method = YeelightSupportedMethodsEnum.adjustColor;
+    const params = [difference, effect, duration];
     return this.castMethod(method, params);
   }
 
@@ -391,15 +367,13 @@ export class YeelightDevice implements IYeelightDevice {
 
   /* Handling data and casting methods */
   private handleSocketMessage(socketMessage: Buffer): void {
-    const stringSocketMessage: string = socketMessage.toString();
+    const stringSocketMessage = socketMessage.toString();
 
     if (stringSocketMessage.length <= 0) {
       return; // not a valid message
     }
 
-    const stringJsons: string[] = stringSocketMessage
-      .split(/\r?\n/)
-      .filter(Boolean);
+    const stringJsons = stringSocketMessage.split(/\r?\n/).filter(Boolean);
 
     stringJsons.forEach((stringJson: string) => {
       try {
@@ -460,7 +434,7 @@ export class YeelightDevice implements IYeelightDevice {
     method: YeelightSupportedMethodsEnum,
     params: TYeelightParams = [],
   ): Promise<IYeelightMethodResponse> {
-    const id: number = 1;
+    const id = 1;
 
     if (this.connected.value === false || this.socket === null) {
       return this.throwError(
@@ -476,7 +450,7 @@ export class YeelightDevice implements IYeelightDevice {
       );
     }
 
-    const result: IYeelightMethodResponse = await this.sendCommand({
+    const result = await this.sendCommand({
       id,
       method,
       params,
@@ -490,11 +464,11 @@ export class YeelightDevice implements IYeelightDevice {
     params: TYeelightParams;
   }): Promise<IYeelightMethodResponse> {
     return new Promise<IYeelightMethodResponse>((resolve) => {
-      const message: string = JSON.stringify(command);
+      const message = JSON.stringify(command);
 
       this.socket.write(message + "\r\n", "utf-8", () => {
         this.socket.on("data", (socketMessage: Buffer) => {
-          const stringJsons: string[] = socketMessage
+          const stringJsons = socketMessage
             .toString()
             .split(/\r?\n/)
             .filter(Boolean);

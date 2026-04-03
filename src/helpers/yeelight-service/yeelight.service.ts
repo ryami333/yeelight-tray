@@ -21,7 +21,8 @@ import { YeelightDevice } from "./device.class";
 
 function getLocalAddress(): string | undefined {
   for (const interfaces of Object.values(os.networkInterfaces())) {
-    for (const net of interfaces!) {
+    if (!interfaces) continue;
+    for (const net of interfaces) {
       if (net.family === "IPv4" && !net.internal) {
         return net.address;
       }
@@ -110,16 +111,23 @@ export class YeelightService implements IYeelight {
 
     const headers: string[] = message.toString().split("\r\n");
 
-    const host: string = this.getHostFromHeaders(headers);
-    const port: number = this.getPortFromHeaders(headers);
+    const host = this.getHostFromHeaders(headers);
+    const port = this.getPortFromHeaders(headers);
     if (!host || !port) {
       return;
     }
 
+    const id = this.getIdFromHeaders(headers);
+    const supportedMethods = this.getSupportedMethodsFromHeaders(headers);
+    const model = this.getModelFromHeaders(headers);
+    if (!id || !supportedMethods || !model) {
+      return;
+    }
+
     const device: IYeelightDevice = new YeelightDevice(host, port);
-    device.id = this.getIdFromHeaders(headers);
-    device.supportedMethods = this.getSupportedMethodsFromHeaders(headers);
-    device.model = this.getModelFromHeaders(headers);
+    device.id = id;
+    device.supportedMethods = supportedMethods;
+    device.model = model;
     device.brightness.next(this.getBrightnessFromHeaders(headers));
     device.colorMode.next(this.getColorModeFromHeaders(headers));
     device.colorTemperature.next(this.getColorTemperatureFromHeaders(headers));
@@ -142,13 +150,15 @@ export class YeelightService implements IYeelight {
     this.devices.next([...this.devices.value, device]);
   }
 
-  private splitHeader(header: string): { key: string; value: string } {
+  private splitHeader(
+    header: string,
+  ): { key: string; value: string } | undefined {
     const separatedKayAndValue: string[] = header.split(": ");
     if (separatedKayAndValue.length < 2) {
       return;
     }
-    const key: string = separatedKayAndValue.shift().toLowerCase();
-    const value: any = separatedKayAndValue.join(":");
+    const key: string = separatedKayAndValue[0].toLowerCase();
+    const value: string = separatedKayAndValue.slice(1).join(":");
 
     return { key, value };
   }
@@ -156,20 +166,18 @@ export class YeelightService implements IYeelight {
   private getFromHeaders(
     parameter: string,
     headers: string[],
-  ): { key: string; value: string } {
-    const header: string = headers.find(
+  ): { key: string; value: string } | undefined {
+    const header = headers.find(
       (singleHeader: string) => singleHeader.indexOf(`${parameter}:`) >= 0,
     );
-    const keyAndValue: { key: string; value: string } =
-      this.splitHeader(header);
-    return keyAndValue;
+    if (!header) {
+      return;
+    }
+    return this.splitHeader(header);
   }
 
-  private getHostFromHeaders(headers: string[]): string {
-    const location: { key: string; value: string } = this.getFromHeaders(
-      "Location",
-      headers,
-    );
+  private getHostFromHeaders(headers: string[]): string | undefined {
+    const location = this.getFromHeaders("Location", headers);
     if (!location?.value) {
       return;
     }
@@ -181,11 +189,8 @@ export class YeelightService implements IYeelight {
     return partedLocation[1].replace("//", "");
   }
 
-  private getPortFromHeaders(headers: string[]): number {
-    const location: { key: string; value: string } = this.getFromHeaders(
-      "Location",
-      headers,
-    );
+  private getPortFromHeaders(headers: string[]): number | undefined {
+    const location = this.getFromHeaders("Location", headers);
     if (!location?.value) {
       return;
     }
@@ -197,11 +202,8 @@ export class YeelightService implements IYeelight {
     return Number(partedLocation[2]);
   }
 
-  private getIdFromHeaders(headers: string[]): string {
-    const id: { key: string; value: string } = this.getFromHeaders(
-      "id",
-      headers,
-    );
+  private getIdFromHeaders(headers: string[]): string | undefined {
+    const id = this.getFromHeaders("id", headers);
     if (!id?.value) {
       return;
     }
@@ -209,11 +211,10 @@ export class YeelightService implements IYeelight {
     return id.value;
   }
 
-  private getModelFromHeaders(headers: string[]): YeelightDeviceModelEnum {
-    const model: { key: string; value: string } = this.getFromHeaders(
-      "model",
-      headers,
-    );
+  private getModelFromHeaders(
+    headers: string[],
+  ): YeelightDeviceModelEnum | undefined {
+    const model = this.getFromHeaders("model", headers);
     if (!model?.value) {
       return;
     }
@@ -221,11 +222,8 @@ export class YeelightService implements IYeelight {
     return model.value as YeelightDeviceModelEnum;
   }
 
-  private getNameFromHeaders(headers: string[]): string {
-    const name: { key: string; value: string } = this.getFromHeaders(
-      "name",
-      headers,
-    );
+  private getNameFromHeaders(headers: string[]): string | undefined {
+    const name = this.getFromHeaders("name", headers);
     if (!name?.value) {
       return;
     }
@@ -233,11 +231,10 @@ export class YeelightService implements IYeelight {
     return name.value;
   }
 
-  private getPowerFromHeaders(headers: string[]): YeelightPowerState {
-    const power: { key: string; value: string } = this.getFromHeaders(
-      "power",
-      headers,
-    );
+  private getPowerFromHeaders(
+    headers: string[],
+  ): YeelightPowerState | undefined {
+    const power = this.getFromHeaders("power", headers);
     if (!power?.value || (power.value !== "on" && power.value !== "off")) {
       return;
     }
@@ -247,11 +244,8 @@ export class YeelightService implements IYeelight {
 
   private getSupportedMethodsFromHeaders(
     headers: string[],
-  ): YeelightSupportedMethodsEnum[] {
-    const support: { key: string; value: string } = this.getFromHeaders(
-      "support",
-      headers,
-    );
+  ): YeelightSupportedMethodsEnum[] | undefined {
+    const support = this.getFromHeaders("support", headers);
     if (!support?.value) {
       return;
     }
@@ -260,11 +254,8 @@ export class YeelightService implements IYeelight {
     return supportedMethods;
   }
 
-  private getBrightnessFromHeaders(headers: string[]): number {
-    const brightness: { key: string; value: string } = this.getFromHeaders(
-      "bright",
-      headers,
-    );
+  private getBrightnessFromHeaders(headers: string[]): number | undefined {
+    const brightness = this.getFromHeaders("bright", headers);
     if (!brightness?.value) {
       return;
     }
@@ -272,14 +263,15 @@ export class YeelightService implements IYeelight {
     return Number(brightness.value);
   }
 
-  private getColorModeFromHeaders(headers: string[]): YeelightColorModeEnum {
-    const colorMode: { key: string; value: string } = this.getFromHeaders(
-      "color_mode",
-      headers,
-    );
+  private getColorModeFromHeaders(
+    headers: string[],
+  ): YeelightColorModeEnum | undefined {
+    const colorMode = this.getFromHeaders("color_mode", headers);
     if (
       !colorMode?.value ||
-      !Object.values(YeelightColorModeEnum).includes(colorMode.value)
+      !Object.values(YeelightColorModeEnum).includes(
+        colorMode.value as unknown as YeelightColorModeEnum,
+      )
     ) {
       return;
     }
@@ -287,9 +279,10 @@ export class YeelightService implements IYeelight {
     return Number(colorMode.value);
   }
 
-  private getColorTemperatureFromHeaders(headers: string[]): number {
-    const colorTemperature: { key: string; value: string } =
-      this.getFromHeaders("ct", headers);
+  private getColorTemperatureFromHeaders(
+    headers: string[],
+  ): number | undefined {
+    const colorTemperature = this.getFromHeaders("ct", headers);
     if (!colorTemperature?.value) {
       return;
     }
@@ -297,11 +290,8 @@ export class YeelightService implements IYeelight {
     return Number(colorTemperature.value);
   }
 
-  private getHueFromHeaders(headers: string[]): number {
-    const hue: { key: string; value: string } = this.getFromHeaders(
-      "hue",
-      headers,
-    );
+  private getHueFromHeaders(headers: string[]): number | undefined {
+    const hue = this.getFromHeaders("hue", headers);
     if (!hue?.value) {
       return;
     }
@@ -309,11 +299,8 @@ export class YeelightService implements IYeelight {
     return Number(hue.value);
   }
 
-  private getRgbFromHeaders(headers: string[]): string {
-    const rgb: { key: string; value: string } = this.getFromHeaders(
-      "rgb",
-      headers,
-    );
+  private getRgbFromHeaders(headers: string[]): string | undefined {
+    const rgb = this.getFromHeaders("rgb", headers);
     if (!rgb?.value) {
       return;
     }
@@ -321,11 +308,8 @@ export class YeelightService implements IYeelight {
     return `#${Number(rgb.value).toString(16)}`;
   }
 
-  private getSaturationFromHeaders(headers: string[]): number {
-    const saturation: { key: string; value: string } = this.getFromHeaders(
-      "sat",
-      headers,
-    );
+  private getSaturationFromHeaders(headers: string[]): number | undefined {
+    const saturation = this.getFromHeaders("sat", headers);
     if (!saturation?.value) {
       return;
     }

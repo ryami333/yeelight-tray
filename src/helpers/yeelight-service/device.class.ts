@@ -1,5 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 import net from "net";
+import { z } from "zod";
 import {
   YeelightDeviceModelEnum,
   YeelightSupportedMethodsEnum,
@@ -12,6 +13,11 @@ import {
   TYeelightParams,
   IYeelightDevice,
 } from "./yeelight.interface";
+
+const propsMessageSchema = z.object({
+  method: z.literal("props"),
+  params: z.record(z.string(), z.string()),
+});
 
 export class YeelightDevice implements IYeelightDevice {
   private readonly defaults: { effect: YeelightEffect; duration: number } = {
@@ -375,33 +381,36 @@ export class YeelightDevice implements IYeelightDevice {
 
     const stringJsons = stringSocketMessage.split(/\r?\n/).filter(Boolean);
 
-    stringJsons.forEach((stringJson: string) => {
+    stringJsons.forEach((stringJson) => {
+      let json: unknown;
       try {
-        JSON.parse(stringJson);
+        json = JSON.parse(stringJson);
       } catch {
         return; // not a JSON object, continue
       }
 
-      const data: { method: string; params?: any } = JSON.parse(stringJson);
-
-      if (data.method === "props") {
-        this.handleProperties(data);
-        return;
+      const result = propsMessageSchema.safeParse(json);
+      if (result.success) {
+        this.handleProperties(result.data.params);
       }
     });
   }
 
-  private handleProperties(data: { method: string; params?: any }): void {
-    for (const param in data.params) {
+  private handleProperties(
+    params: z.output<typeof propsMessageSchema>["params"],
+  ): void {
+    for (const param in params) {
       if (!param) {
         return;
       }
 
-      const value: string = data.params[param];
+      const value = params[param];
 
       switch (param) {
         case YeelightSupportedPropertiesEnum.power:
-          this.power.next(value as YeelightPowerState);
+          if (value === "on" || value === "off") {
+            this.power.next(value);
+          }
           break;
         case YeelightSupportedPropertiesEnum.brightness:
           this.brightness.next(Number(value));

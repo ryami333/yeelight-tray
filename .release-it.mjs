@@ -21,7 +21,7 @@ const config = {
   },
   hooks: {
     "before:init": ["yarn prettier . --check", "yarn tsc", "yarn eslint ."],
-    "after:bump": "yarn make",
+    "after:bump": "rm -rf out && yarn make",
   },
 };
 

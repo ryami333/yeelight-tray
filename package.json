@@ -11,7 +11,8 @@
     "start": "electron-forge start",
     "build:icons": "electron-icon-builder --flatten --input=./lightbulb.png --output=.",
     "package": "COMMIT_HASH=$(git rev-parse --short HEAD) yarn build:icons && electron-forge package",
-    "make": "COMMIT_HASH=$(git rev-parse --short HEAD) electron-forge make"
+    "make": "COMMIT_HASH=$(git rev-parse --short HEAD) electron-forge make",
+    "release": "release-it"
   },
   "main": ".vite/build/main.js",
   "author": "mitch@mitch-ryan.com",
@@ -25,6 +26,7 @@
     "electron-icon-builder": "^2.0.1",
     "eslint": "^10.1.0",
     "prettier": "^3.8.1",
+    "release-it": "^19.2.4",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.0",
     "vite": "^8.0.3"

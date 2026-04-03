@@ -7,7 +7,4 @@ export default defineConfig({
     conditions: ["node"],
     mainFields: ["module", "jsnext:main", "jsnext"],
   },
-  define: {
-    "process.env.commit": JSON.stringify(process.env.COMMIT_HASH ?? "local"),
-  },
 });

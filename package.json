@@ -10,8 +10,8 @@
     "lint": "eslint .",
     "start": "electron-forge start",
     "build:icons": "electron-icon-builder --flatten --input=./lightbulb.png --output=.",
-    "package": "COMMIT_HASH=$(git rev-parse --short HEAD) yarn build:icons && electron-forge package",
-    "make": "COMMIT_HASH=$(git rev-parse --short HEAD) electron-forge make",
+    "package": "yarn build:icons && electron-forge package",
+    "make": "electron-forge make",
     "release": "release-it"
   },
   "main": ".vite/build/main.js",

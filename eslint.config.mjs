@@ -6,4 +6,9 @@ export default defineConfig([
   globalIgnores(["dist/", "out/", ".vite/"]),
   eslintJs.configs.recommended,
   ...typescriptEslint.configs.recommended,
+  {
+    rules: {
+      "@typescript-eslint/no-non-null-assertion": "error",
+    },
+  },
 ]);

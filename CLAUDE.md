@@ -23,5 +23,5 @@ CI runs all four checks: `yarn package`, `yarn lint`, `yarn tsc`, `yarn prettier
 ## Style
 
 - TypeScript with strict mode
-- Prettier defaults for formatting
+- Prettier defaults for formatting. Please always format every changed file with `yarn prettier . --write`.
 - No test framework — CI validates via lint, typecheck, format, and successful packaging

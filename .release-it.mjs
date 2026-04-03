@@ -20,12 +20,8 @@ const config = {
     publish: false,
   },
   hooks: {
-    "before:init": [
-      "yarn prettier . --check",
-      "yarn tsc",
-      "yarn eslint .",
-      "yarn make", // No need to do `yarn package` because `make` is a superset of `package`.
-    ],
+    "before:init": ["yarn prettier . --check", "yarn tsc", "yarn eslint ."],
+    "after:bump": "yarn make",
   },
 };
 

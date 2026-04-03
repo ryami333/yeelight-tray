@@ -10,6 +10,7 @@ const config = {
     requireBranch: "main",
     tag: true,
     commit: true,
+    push: true,
   },
   github: {
     release: true,

@@ -1606,12 +1606,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^22.5.5, @types/node@npm:^22.7.7":
+"@types/node@npm:^22.5.5":
   version: 22.18.10
   resolution: "@types/node@npm:22.18.10"
   dependencies:
     undici-types: "npm:~6.21.0"
   checksum: 10c0/37b34553f1953ab8fc25b7467d44701446400f62547adb62c842cebac091350985470aeed87acd60f5295778c370d9721d477310e643677a7eab03a8dc6ed74f
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^24.9.0":
+  version: 24.12.1
+  resolution: "@types/node@npm:24.12.1"
+  dependencies:
+    undici-types: "npm:~7.16.0"
+  checksum: 10c0/0917fdf2e87980a8cd61b5b94c96443a8448cdc39b7d1782dc7d9916e4daa1bd6bac526125e9e4901a9cb41bfffee2dafdbeabc9d0639da7b4d620a7c30edc63
   languageName: node
   linkType: hard
 
@@ -3079,16 +3088,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:^38.8.6":
-  version: 38.8.6
-  resolution: "electron@npm:38.8.6"
+"electron@npm:^41.1.1":
+  version: 41.1.1
+  resolution: "electron@npm:41.1.1"
   dependencies:
     "@electron/get": "npm:^2.0.0"
-    "@types/node": "npm:^22.7.7"
+    "@types/node": "npm:^24.9.0"
     extract-zip: "npm:^2.0.1"
   bin:
     electron: cli.js
-  checksum: 10c0/4e3c02a01b99a77d715a28ec1b1053382860c3100a735adae5784387e38f7cb800313aeb2c9d292297f37237b57b8660bafcf913360a6b68865a45642a495264
+  checksum: 10c0/b52df5c263ee612e62b7d804bf97d739f2876b5b16cf46cf99ec338d59093cb066bf85d1ad77115d4839a5ea64bba66ecb27111696a409cbe64eb81c3e71449e
   languageName: node
   linkType: hard
 
@@ -7257,6 +7266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~7.16.0":
+  version: 7.16.0
+  resolution: "undici-types@npm:7.16.0"
+  checksum: 10c0/3033e2f2b5c9f1504bdc5934646cb54e37ecaca0f9249c983f7b1fc2e87c6d18399ebb05dc7fd5419e02b2e915f734d872a65da2e3eeed1813951c427d33cc9a
+  languageName: node
+  linkType: hard
+
 "unique-filename@npm:^2.0.0":
   version: 2.0.1
   resolution: "unique-filename@npm:2.0.1"
@@ -7732,7 +7748,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@types/ms": "npm:^2.1.0"
     concurrently: "npm:^8.2.2"
-    electron: "npm:^38.8.6"
+    electron: "npm:^41.1.1"
     electron-icon-builder: "npm:^2.0.1"
     esbuild: "npm:^0.25.12"
     eslint: "npm:^10.1.0"

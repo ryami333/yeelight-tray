@@ -199,6 +199,3 @@ app
 
 app.dock?.hide();
 
-app.setLoginItemSettings({
-  openAsHidden: true,
-});

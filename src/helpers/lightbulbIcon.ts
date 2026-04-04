@@ -1,7 +1,8 @@
 import { nativeImage } from "electron/common";
-import lightbulbPath from "../../lightbulb.png?asset";
+import { resolve } from "path";
 
-export const lightbulbIcon = nativeImage.createFromPath(lightbulbPath).resize({
-  height: 16,
-  width: 16,
-});
+const lightbulbPath = resolve(__dirname, "lightbulb.png");
+
+export const lightbulbIcon = nativeImage
+  .createFromPath(lightbulbPath)
+  .resize({ height: 16, width: 16 });

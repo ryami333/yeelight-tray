@@ -23,7 +23,6 @@ const config = {
     name: "Yeelight Tray",
     executableName: "Yeelight Tray",
     icon: "./icons/icon",
-    extraResource: ["./lightbulb.png"],
     // Hide from dock and cmd+tab (tray-only app)
     extendInfo: {
       LSUIElement: true,

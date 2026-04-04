@@ -8,10 +8,12 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: "copy-lightbulb",
+      name: "copy-resources",
       async writeBundle(options) {
-        const dest = resolve(options.dir!, "lightbulb.png");
-        await cp(resolve(__dirname, "lightbulb.png"), dest);
+        if (!options.dir) return;
+        await cp(resolve(__dirname, "resources"), resolve(options.dir), {
+          recursive: true,
+        });
       },
     },
   ],

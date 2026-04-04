@@ -9,7 +9,7 @@
     "dev": "electron-forge start",
     "lint": "eslint .",
     "start": "electron-forge start",
-    "build:icons": "electron-icon-builder --flatten --input=./lightbulb.png --output=.",
+    "build:icons": "electron-icon-builder --flatten --input=./resources/lightbulb.png --output=.",
     "package": "yarn build:icons && electron-forge package",
     "make": "electron-forge make",
     "release": "GITHUB_TOKEN=$(gh auth token) yarn release-it"

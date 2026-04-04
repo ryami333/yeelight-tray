@@ -11,7 +11,10 @@ Runs as a tray icon with no dock icon or visible window. Supports controlling mu
 - **Color temperature** — switch between neutral (4271K), warm (2985K), and warm RGB (1700K)
 - **RGB colors** — quick presets for red, purple, green, yellow, and blue
 - **Auto-discovery** — finds Yeelight devices on the local network via SSDP
-- **Launch at login** — starts hidden on login automatically
+
+## Installation
+
+Download the latest `.zip` from the [releases page](https://github.com/ryami333/yeelight-tray/releases/latest), extract it, and move `Yeelight Tray.app` to your Applications folder.
 
 ## Prerequisites
 

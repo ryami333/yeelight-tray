@@ -198,4 +198,3 @@ app
   .catch(console.error);
 
 app.dock?.hide();
-

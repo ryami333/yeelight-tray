@@ -3,7 +3,7 @@
   "version": "1.0.12",
   "description": "A tray-application for controlling Yeelight lights",
   "engines": {
-    "node": "^22.20.0"
+    "node": "^24.14.0"
   },
   "scripts": {
     "dev": "electron-forge start",

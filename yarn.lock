@@ -2254,6 +2254,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^25.5.2":
+  version: 25.5.2
+  resolution: "@types/node@npm:25.5.2"
+  dependencies:
+    undici-types: "npm:~7.18.0"
+  checksum: 10c0/11e41a85401724cd1a4de6fb7bd4264ec46db10c09fc8cf8d41de4ede0a7063db458348f859ead4ec0929906aa26aaf45a5fef3aa59742ca0521cda9cee52377
+  languageName: node
+  linkType: hard
+
 "@types/parse-path@npm:^7.0.0":
   version: 7.0.3
   resolution: "@types/parse-path@npm:7.0.3"
@@ -8746,6 +8755,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~7.18.0":
+  version: 7.18.2
+  resolution: "undici-types@npm:7.18.2"
+  checksum: 10c0/85a79189113a238959d7a647368e4f7c5559c3a404ebdb8fc4488145ce9426fcd82252a844a302798dfc0e37e6fb178ff481ed03bc4caf634c5757d9ef43521d
+  languageName: node
+  linkType: hard
+
 "undici@npm:7.24.5":
   version: 7.24.5
   resolution: "undici@npm:7.24.5"
@@ -9331,6 +9347,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.1"
     "@t3-oss/env-core": "npm:^0.13.11"
     "@types/ms": "npm:^2.1.0"
+    "@types/node": "npm:^25.5.2"
     dotenv: "npm:^17.4.2"
     electron: "npm:^42.4.1"
     electron-icon-builder: "npm:^2.0.1"

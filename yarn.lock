@@ -1864,6 +1864,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@t3-oss/env-core@npm:^0.13.11":
+  version: 0.13.11
+  resolution: "@t3-oss/env-core@npm:0.13.11"
+  peerDependencies:
+    arktype: ^2.1.0
+    typescript: ">=5.0.0"
+    valibot: ^1.0.0-beta.7 || ^1.0.0
+    zod: ^3.24.0 || ^4.0.0
+  peerDependenciesMeta:
+    arktype:
+      optional: true
+    typescript:
+      optional: true
+    valibot:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10c0/acb1d5c8f184f0004612b0ed1ef965f3fd014b945b3192057f1500ba760ded8d4c988e6cfed3c63070ccde3b8f7dc27f90044d29474325c5025e44fd3c607441
+  languageName: node
+  linkType: hard
+
 "@tokenizer/token@npm:^0.3.0":
   version: 0.3.0
   resolution: "@tokenizer/token@npm:0.3.0"
@@ -3563,6 +3584,13 @@ __metadata:
   version: 17.4.0
   resolution: "dotenv@npm:17.4.0"
   checksum: 10c0/f040215466f9a0b0eef5053951c048ee613f587bf050d4e73b39261ec315a5e0331d246a99a2fdcfd38051fce13e9bd7e2801ae83c4368fc86c2ff0f758dd1db
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^17.4.2":
+  version: 17.4.2
+  resolution: "dotenv@npm:17.4.2"
+  checksum: 10c0/164f8e77a646c8446867d5b588d26ea6005c8ea7c5eb41cf926f6113d23f2191355f6e0cfd95ea9bab98394a5b0a3f1e51a8399711b666fe55cc7b0bd745f942
   languageName: node
   linkType: hard
 
@@ -9013,7 +9041,9 @@ __metadata:
     "@electron-forge/plugin-vite": "npm:^7.11.2"
     "@electron/notarize": "npm:^3.1.1"
     "@eslint/js": "npm:^10.0.1"
+    "@t3-oss/env-core": "npm:^0.13.11"
     "@types/ms": "npm:^2.1.0"
+    dotenv: "npm:^17.4.2"
     electron: "npm:^42.4.1"
     electron-icon-builder: "npm:^2.0.1"
     eslint: "npm:^10.5.0"
